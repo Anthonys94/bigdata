@@ -1,0 +1,47 @@
+path="/FileStore/tables/"
+node=path+"Users.txt"
+analysis = sc.textFile(node).map(lambda line: (line.split("\t")[0].toString))
+print(analysis)
+path="/FileStore/tables/"
+utenti_filename=path+"Users.txt"
+reviews_filename=path+"Reviews_news.txt"
+analysis = sc.textFile(utenti_filename).map(lambda line: line.split("\t"))
+utenti = analysis.map(lambda x : [x[0],x[1],x[2].replace("-","")]).toDF(["id","name","date"])
+analysis_1 = sc.textFile(reviews_filename).map (lambda line : line.split("\t"))
+reviews = analysis_1.map(lambda x : [x[0],x[1],x[2],x[3].replace("-",""),float(x[4]),int(x[5]),int(x[6]),int(x[7])]).toDF(["id_c","id_u","id_b","timestamp","star","v1","v2","v3"])
+print(reviews)
+display(reviews)
+print(utenti)
+print(utenti.count())
+print(reviews.count())
+utenti_review = utenti.join(reviews,utenti.id==reviews.id_u).select(["id","name","timestamp","star"]).distinct()
+utenti_review=utenti_review.filter(utenti_review.star>4)
+#display(utenti_review)
+#Star_users = utenti_review.groupBy("id").avg("Star").toDF("id","avg_stelle")
+#display(Star_users)
+#Raggruppi rispetto ad una particolare dimensione o a un insieme 
+#Aggregator_users= utenti_review.orderBy("id")
+#display(Aggregator_users)
+filter_data=utenti_review.filter("avg_stelle">3).withColumn("",lit())
+from graphframes import *
+# Create a Vertex DataFrame with unique ID column "id"
+v = sqlContext.createDataFrame([
+  ("a", "Alice", 34),
+  ("b", "Bob", 36),
+  ("c", "Charlie", 30),
+], ["id", "name", "age"])
+# Create an Edge DataFrame with "src" and "dst" columns
+e = sqlContext.createDataFrame([
+  ("a", "b", "friend"),
+  ("b", "c", "follow"),
+  ("c", "b", "follow"),
+], ["src", "dst", "relationship"])
+# Create a GraphFrame
+g = GraphFrame(v, e)
+# Query: Get in-degree of each vertex.
+g.inDegrees.show()
+# Query: Count the number of "follow" connections in the graph.
+g.edges.filter("relationship = 'follow'").count()
+# Run PageRank algorithm, and show results.
+results = g.pageRank(resetProbability=0.01, maxIter=20)
+results.vertices.select("id", "pagerank").show()
