@@ -65,8 +65,10 @@ for element in reviews:
     # 3 stelle --> 0        ==> punteggio= 0.5*Stella-1.5
     # 4 stelle --> 0.5
     # 5 stelle --> 1 
-   subel['valore']= (lib+0.5*element['stars']-1.5)*(0.7*element['useful']+0.1*element['funny']+0.2*element['cool'])*valoreutente
-   jsonlist.append(subel)
+	user = db.sintesiuser.find({"user_id": subel['user_id']}) 
+	valoreUtente = user['valore'] 
+	subel['valore']= (lib+0.5*element['stars']-1.5)*(0.7*element['useful']+0.1*element['funny']+0.2*element['cool'])*valoreUtente
+	jsonlist.append(subel)
 
 #mettere l'output su un file json che si chiama sintesireview.json
 #inserire il file nel database. 
@@ -77,5 +79,9 @@ with open('sintesireview.json','w') as outfile:
 
 #vedere come salvare sul db!
 
+collection = db.sintesireview 
+clear = collection.remove()            #pulisco la collection da eventuali scritture precedenti 
+result = collection.insert_many(jsonlist)    #inserisco gli elementi calcolati 
+ 
 client.close()
 
