@@ -91,11 +91,14 @@ for element in reviews:
     # 5 stelle --> 1       
     
     valoreUtente = utentidict[subel['user_id']]
-    
+    subel['funny']=element['funny']
+    subel['cool']=element['cool']
+    subel['useful']=element['useful']
+    subel['vlutente']=valoreUtente
     subel['valorelib']= lib                     #valorelib
     subel['valoretext']=lib+0.5*element['stars']-1.5 #valore solo testo
     #valore opinione
-    subel['valoreOp']= (lib+0.5*element['stars']-1.5)*(1 + 0.7*element['useful']+0.1*element['funny']+0.2*element['cool'])*(1 + valoreUtente)
+    #subel['valoreOp']= (lib+0.5*element['stars']-1.5)*(1 + 0.7*element['useful']+0.1*element['funny']+0.2*element['cool'])*(1 + valoreUtente)
     
     jsonlist.append(subel)
 
@@ -108,9 +111,9 @@ with open('sintesireview.json','w') as outfile:
 
 #vedere come salvare sul db!
 
-collection = db.sintesireview 
-clear = collection.remove()            #pulisco la collection da eventuali scritture precedenti 
-result = collection.insert_many(jsonlist)    #inserisco gli elementi calcolati '
+#collection = db.sintesireview 
+#clear = collection.remove()            #pulisco la collection da eventuali scritture precedenti 
+#result = collection.insert_many(jsonlist)    #inserisco gli elementi calcolati '
 
 client.close()
 
