@@ -27,7 +27,7 @@ for element in users:
 		Elite17 = 1
 	else:
 		Elite17 = 0
-	subel['valore'] = 0.27*Elite17+ 0.05*numAnniElite+0.13*element['fans']+0.08*element['review_count']+0.08*numAmici+0.1*sCompl+0.19*element['useful']+0.03*element['funny']+0.05*element['cool']
+	subel['valore'] = 0.27*Elite17+ 0.05*numAnniElite+0.13*element['fans']+0.06*element['review_count']+0.1*numAmici+0.1*sCompl+0.19*element['useful']+0.03*element['funny']+0.05*element['cool']
 	jsonlist.append(subel)
 	
 with open('sintesiuser.json','w') as outfile:

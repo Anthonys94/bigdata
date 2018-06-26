@@ -18,7 +18,7 @@ import csv
 
 client=MongoClient('localhost',27017)
 db=client.YelpDB
-mostreviewed = db.business.find().sort({"review_count" : -1}).limit(3)
+mostreviewed = db.business.find().sort("review_count",-1).limit(3)
 negozi=[]
 for element in mostreviewed:
     negozi.append(element['business_id'])
@@ -27,43 +27,34 @@ reviews1 = db.sintesireviewopt.find({"business_id" : negozi[0]})
 reviews2 = db.sintesireviewopt.find({"business_id" : negozi[1]})
 reviews3 = db.sintesireviewopt.find({"business_id" : negozi[2]})
 
-review1 = []
-subel1 = {}
+review1 = [["business_id","valoreOP1","valoreOP2","valoreOP3","user_id","vlutente","valoretext","date","stars","valorelib"]]
 for e in reviews1:
-	subel1['business_id']=e['business_id]
-	subel1['valore1']=e['valoreOP1']
-	subel1['valore2']=e['valoreOP2']
-	subel1['valore3']=e['valoreOP3']
-	subel1['user_id']=e['user_id']
-	subel1['vlutente']=e['vlutente']
-	review1.append(subel)
+    review1.append([e['business_id'],e['valoreOP1'],e['valoreOP2'],e['valoreOP3'],e['user_id'],e['vlutente'],e['valoretext'],e['date'],e['stars'],e['valorelib']])
 	
-review2 = []
-subel2 = {}
-for e in reviews2:
-	subel2['business_id']=e['business_id]
-	subel2['valore1']=e['valoreOP1']
-	subel2['valore2']=e['valoreOP2']
-	subel2['valore3']=e['valoreOP3']
-	subel2['user_id']=e['user_id']
-	subel2['vlutente']=e['vlutente']
-	review2.append(subel)
 
-review3 = []
-subel3 = {}
+review2 = [["business_id","valoreOP1","valoreOP2","valoreOP3","user_id","vlutente","valoretext","date","stars","valorelib"]]
+for e in reviews2:
+    review2.append([e['business_id'],e['valoreOP1'],e['valoreOP2'],e['valoreOP3'],e['user_id'],e['vlutente'],e['valoretext'],e['date'],e['stars'],e['valorelib']])
+
+review3 = [["business_id","valoreOP1","valoreOP2","valoreOP3","user_id","vlutente","valoretext","date","stars","valorelib"]]
 for e in reviews3:
-	subel3['business_id']=e['business_id]
-	subel3['valore1']=e['valoreOP1']
-	subel3['valore2']=e['valoreOP2']
-	subel3['valore3']=e['valoreOP3']
-	subel3['user_id']=e['user_id']
-	subel3['vlutente']=e['vlutente']
-	review3.append(subel)
+    review3.append([e['business_id'],e['valoreOP1'],e['valoreOP2'],e['valoreOP3'],e['user_id'],e['vlutente'],e['valoretext'],e['date'],e['stars'],e['valorelib']])
 	  
 myFile1 = open('business1.csv', 'w')  
 with myFile1:  
-   writer = csv.writer(myFile1, delimiter=', ', quotechar='|', quoting=csv.QUOTE_MINIMAL))
+   writer = csv.writer(myFile1, delimiter=",", quotechar="|", quoting=csv.QUOTE_MINIMAL)
    writer.writerows(review1)
-	
+
+myFile2= open('business2.csv','w')
+with myFile2:
+    writer = csv.writer(myFile2, delimiter=",", quotechar="|", quoting=csv.QUOTE_MINIMAL)
+    writer.writerows(review2)
+
+myFile3= open('business3.csv','w')
+with myFile3:
+    writer = csv.writer(myFile3, delimiter=";", quotechar="|", quoting=csv.QUOTE_MINIMAL)
+    writer.writerows(review3)
+
+
 
 client.close()
