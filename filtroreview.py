@@ -28,20 +28,42 @@ reviews2 = db.sintesireviewopt.find({"business_id" : negozi[1]})
 reviews3 = db.sintesireviewopt.find({"business_id" : negozi[2]})
 
 review1 = []
-subel = []
+subel1 = {}
 for e in reviews1:
-	subel['business_id']=e['business_id]
-	subel['valore1']=e['valoreOP1']
-	subel['valore2']=e['valoreOP2']
-	subel['valore3']=e['valoreOP3']
+	subel1['business_id']=e['business_id]
+	subel1['valore1']=e['valoreOP1']
+	subel1['valore2']=e['valoreOP2']
+	subel1['valore3']=e['valoreOP3']
+	subel1['user_id']=e['user_id']
+	subel1['vlutente']=e['vlutente']
 	review1.append(subel)
 	
+review2 = []
+subel2 = {}
+for e in reviews2:
+	subel2['business_id']=e['business_id]
+	subel2['valore1']=e['valoreOP1']
+	subel2['valore2']=e['valoreOP2']
+	subel2['valore3']=e['valoreOP3']
+	subel2['user_id']=e['user_id']
+	subel2['vlutente']=e['vlutente']
+	review2.append(subel)
 
-
-bloblist=reviews1
-print len(bloblist)
-for i,blob in enumerate(bloblist):
-	print("Review value for top business {}.format(i+1))
+review3 = []
+subel3 = {}
+for e in reviews3:
+	subel3['business_id']=e['business_id]
+	subel3['valore1']=e['valoreOP1']
+	subel3['valore2']=e['valoreOP2']
+	subel3['valore3']=e['valoreOP3']
+	subel3['user_id']=e['user_id']
+	subel3['vlutente']=e['vlutente']
+	review3.append(subel)
+	  
+myFile1 = open('business1.csv', 'w')  
+with myFile1:  
+   writer = csv.writer(myFile1, delimiter=', ', quotechar='|', quoting=csv.QUOTE_MINIMAL))
+   writer.writerows(review1)
 	
 
 client.close()
