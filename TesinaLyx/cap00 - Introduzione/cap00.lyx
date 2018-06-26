@@ -139,76 +139,65 @@ morecomment=[s]{--}
 \begin_body
 
 \begin_layout Standard
-In tale elaborato è stato documentato il lavoro svolto dall' A.M.P Solution
- per la reingegnerizzazione del sistema informativo dell'azienda Publieuro
- S.A.S.
- Il gruppo è composto dai seguenti studenti : Galli Antonio, Gravina Michela,
- Valletta Paolo.
- 
+In tale elaborato è stato documentato il lavoro svolto dal gruppo costituto
+ da:
+\end_layout
+
+\begin_layout Itemize
+Galli Antonio
+\end_layout
+
+\begin_layout Itemize
+Giordano Raffaele
+\end_layout
+
+\begin_layout Itemize
+Gravina Michela
 \end_layout
 
 \begin_layout Standard
-Il processo di reingegnerizzazione si è articolati in varie fasi:
+Tale elaborato ha come obiettivo principale la Sentiment Analysis delle
+ review contenute nel database messo a disposizione da Yelp.
+ In particolare, tale documentazione si articola nei seguenti capitoli:
 \end_layout
 
-\begin_layout Enumerate
+\begin_layout Itemize
 
 \emph on
-Analisi aziendale e modellazione dei processi
+\noun on
+Scopo del progetto: 
 \emph default
- (AS-IS), descritte nel Capitolo 1.
- In tale capitolo viene descritta l'organizzazione dell'azienda con i vari
- processi modellati con con Visual Paragim 14.2 utilizzando Activity Diagram,
- Data Flow Diagram, Assembly Lines e Use Case Diagram e poi attraverso il
- paradigma CRASO.
-\end_layout
-
-\begin_layout Enumerate
-
-\emph on
-Modellazione e Simulazione del TO-BE
-\emph default
-, descritte nel Capitolo 2.
- In tale capitolo viene descritto l'intervento proposto, modellando i vari
- processi mediante il formalismo BMPN, utilizzando lo strumento BonitaBPM
- Community 7.5.4, che ha permesso anche una simulazione.
+\noun default
+In tale capitolo sono spiegati, in grandi linee, lo scopo dell'analisi e
+ le osservazioni principali che hanno caratterizzato le principali scelte
+ di progetto.
  
 \end_layout
 
-\begin_layout Enumerate
+\begin_layout Itemize
 
-\emph on
-Introduzione del sistema ERP ODOO
-\emph default
-, descritto nel Capitolo 3.
- In tale capitolo viene mostrato come i processi aziendali sono adattati
- all'ERP ODOO utilizzato.
- 
+\noun on
+Sentiment Analysis
+\noun default
+: In tale capitolo sono messi in evidenza gli strumenti che hanno permesso
+ la realizzazione della sentiment Analysis.
 \end_layout
 
-\begin_layout Enumerate
+\begin_layout Itemize
 
-\emph on
-Studio di fattibilità, descritto, 
-\emph default
-nel Capitolo 4: In tale capitolo è stata effettuata un'analisi dei processi
- di business attraverso la valutazione dei KPI prima e dopo gli interventi.
- Infine è stato presentato lo studio di fattibilità in cui sono analizzate
- le varie proposte con caratteristiche e costi diversi.
- 
+\noun on
+Architettura
+\noun default
+: In tale sezione è presentata l'architettura del sistema realizzato
 \end_layout
 
-\begin_layout Enumerate
+\begin_layout Itemize
 
-\emph on
-Project Management
-\emph default
-, descritto nel Capitolo 5: In tale capitolo viene descritta la pianificazione
- del progetto, evidenziando la tempistica delle varie attività.
-\end_layout
-
-\begin_layout Standard
-Buona Lettura.
+\noun on
+Implementazione
+\noun default
+: In tale capitolo viene riportata come l'analisi descritta nelle sezioni
+ precedenti è stata implementata, riportando i relativi risultati.
  
 \end_layout
 
