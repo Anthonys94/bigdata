@@ -21,8 +21,8 @@ for element in mostreviewed:
 print "--- Lettura delle review"
 
 print str(sys.argv[1])
-reviews1 = db.sintesireviewoptidea.find({"business_id" : str(sys.argv)[1]})
-
+reviews1 = db.sintesireviewoptidea.find({"business_id" : sys.argv[1]})
+print reviews1.count()
 review1=[]
 for e in reviews1:
     review1.append([e['business_id'],e['valoreOP1'],e['valoreOP2'],e['valoreOP3'],e['user_id'],e['vlutente'],e['valoretext'],e['date'],e['stars'],e['valorelib']])

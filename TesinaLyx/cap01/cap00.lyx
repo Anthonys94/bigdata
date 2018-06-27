@@ -139,66 +139,7 @@ morecomment=[s]{--}
 \begin_body
 
 \begin_layout Standard
-In tale elaborato è stato documentato il lavoro svolto dal gruppo costituto
- da:
-\end_layout
 
-\begin_layout Itemize
-Galli Antonio
-\end_layout
-
-\begin_layout Itemize
-Giordano Raffaele
-\end_layout
-
-\begin_layout Itemize
-Gravina Michela
-\end_layout
-
-\begin_layout Standard
-Tale elaborato ha come obiettivo principale la Sentiment Analysis delle
- review contenute nel database messo a disposizione da Yelp.
- In particolare, tale documentazione si articola nei seguenti capitoli:
-\end_layout
-
-\begin_layout Itemize
-
-\emph on
-\noun on
-Scopo del progetto: 
-\emph default
-\noun default
-In tale capitolo sono spiegati, in grandi linee, lo scopo dell'analisi e
- le osservazioni principali che hanno caratterizzato le principali scelte
- di progetto.
- 
-\end_layout
-
-\begin_layout Itemize
-
-\noun on
-Sentiment Analysis
-\noun default
-: In tale capitolo sono messi in evidenza gli strumenti che hanno permesso
- la realizzazione della sentiment Analysis.
-\end_layout
-
-\begin_layout Itemize
-
-\noun on
-Architettura
-\noun default
-: In tale sezione è presentata l'architettura del sistema realizzato
-\end_layout
-
-\begin_layout Itemize
-
-\noun on
-Implementazione
-\noun default
-: In tale capitolo viene riportata come l'analisi descritta nelle sezioni
- precedenti è stata implementata, riportando i relativi risultati.
- 
 \end_layout
 
 \end_body

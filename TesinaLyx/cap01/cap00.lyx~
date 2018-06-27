@@ -183,5 +183,23 @@ Sentiment Analysis
  la realizzazione della sentiment Analysis.
 \end_layout
 
+\begin_layout Itemize
+
+\noun on
+Architettura
+\noun default
+: In tale sezione è presentata l'architettura del sistema realizzato
+\end_layout
+
+\begin_layout Itemize
+
+\noun on
+Implementazione
+\noun default
+: In tale capitolo viene riportata come l'analisi descritta nelle sezioni
+ precedenti è stata implementata, riportando i relativi risultati.
+ 
+\end_layout
+
 \end_body
 \end_document

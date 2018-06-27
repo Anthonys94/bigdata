@@ -144,15 +144,15 @@ In tale elaborato è stato documentato il lavoro svolto dal gruppo costituto
 \end_layout
 
 \begin_layout Itemize
-Galli Antonio
+Galli Antonio -M63000721
 \end_layout
 
 \begin_layout Itemize
-Giordano Raffaele
+Giordano Raffaele -M63000746
 \end_layout
 
 \begin_layout Itemize
-Gravina Michela
+Gravina Michela - M63000708
 \end_layout
 
 \begin_layout Standard
@@ -199,10 +199,6 @@ Implementazione
 : In tale capitolo viene riportata come l'analisi descritta nelle sezioni
  precedenti è stata implementata, riportando i relativi risultati.
  
-\end_layout
-
-\begin_layout Standard
-
 \end_layout
 
 \end_body
