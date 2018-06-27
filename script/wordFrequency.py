@@ -31,7 +31,7 @@ tempReview = db.review.find({"business_id": str(sys.argv[1])})
 r = ''
 for review in tempReview:
     r = r + review['text']
-    reviews.append(TextBlob(r).lower())
+reviews.append(TextBlob(r).lower())
 
 
 bloblist = reviews
