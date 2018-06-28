@@ -1,0 +1,326 @@
+#LyX 2.2 created this file. For more info see http://www.lyx.org/
+\lyxformat 508
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass book
+\begin_preamble
+\usepackage{listings,xcolor,courier,bookmark}
+\usepackage{listingsutf8}
+\definecolor{darkblue}{named}{blue}
+\definecolor{darkred}{named}{red}
+\definecolor{grau}{named}{gray}
+\let\Righttorque\relax
+\lstset{
+captionpos=b,
+commentstyle=\color[rgb]{0.133,0.545,0.133},
+keywordstyle=\color{darkblue},
+stringstyle=\color{darkred},
+extendedchars=true,
+basicstyle=\small\ttfamily,
+showstringspaces=false,
+tabsize=2,
+numbers=left,
+numberstyle=\tiny,
+breakautoindent  = true,
+breakindent      = 2em,
+breaklines       = true,
+postbreak        = ,
+prebreak         = \raisebox{-.8ex}[0ex][0ex]{\Righttorque},
+showspaces=false, 
+showtabs=false, 
+showstringspaces=false,
+language=VHDL,
+frame=single,
+morecomment=[s]{--}
+}
+
+
+\renewcommand*{\lstlistingname}{Codice Componente}
+
+
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+
+\fancyhead{} 
+\fancyfoot{} 
+
+\fancyhead[RO,LE]{\bfseries \leftmark}
+\fancyfoot[LE,RO]{\thepage}
+\fancyfoot[LO,CE]{Tesina in ASE: Architetture dei Sistemi di Elaborazione}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0.4pt}
+
+\date{}
+\cfoot{}
+\usepackage{eso-pic,graphicx}
+\makeatletter
+\newcommand\BackgroundPicture[2]{
+\setlength{\unitlength}{1pt}
+\put(0,\strip@pt\paperheight){
+\parbox[t][\paperheight]{\paperwidth}{
+\vfill
+\centering\includegraphics[angle=#2]{#1}
+\vfill
+}
+}
+}
+\makeatother
+\end_preamble
+\use_default_options true
+\maintain_unincluded_children false
+\language italian
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman "default" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
+\font_default_family rmdefault
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize 12
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry true
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 1
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\leftmargin 2cm
+\topmargin 2.5cm
+\rightmargin 2cm
+\bottommargin 2cm
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Standard
+Lo scopo del progetto consiste nella quantificazione dell'opinione pubblica
+ e quindi alla base vi è l'analisi delle review scritte dai vari utenti.
+ Pertanto sono necessari degli strumenti che permettono di effettuare la
+ processazione del linguaggio naturale e la sentiment analysis.
+ Gli strumenti da noi utilizzati sono:
+\end_layout
+
+\begin_layout Itemize
+Libreria Natural Language Toolkit (Vader) di Python: tale libreria è stata
+ utilizzata per effettuare la sentiment analysis delle review
+\end_layout
+
+\begin_layout Itemize
+Libreria TextBlob di Python: tale libreria è stata utilizzata per effettuare
+ al processazione del linguaggio naturale.
+ 
+\end_layout
+
+\begin_layout Section
+Natural Language Toolkit (Vader)
+\end_layout
+
+\begin_layout Standard
+La sentiment analysis è uno studio computazionale delle opinioni, dei pensieri
+ delle persone che possono essere espressi in testi oppure attraverso le
+ immagini.
+ Consiste nell'elaborazione del linguaggio naturale, nell'analisi testuale
+ e linguistica per identificare ed estrarre informazioni soggettive da diverse
+ fonti.
+\end_layout
+
+\begin_layout Standard
+Vader è un package di python che si installa con la libreria NLTK.
+ Vader è un esempio di metodo lessicale per la sentiment analysis: gli approcci
+ lessicali calcolano il sentiment score di una frase considerando lo score
+ di ogni parola all'interno della frase stessa.
+ 
+\end_layout
+
+\begin_layout Standard
+Vader si basa su un dizionario che effettua un mapping tra la parola e il
+ suo significato emotivo: ad ogni parola viene associato un valore di intensità
+ tra -4 e 4.
+ Il sentiment score di un testo viene quindi effettuato con la somma delle
+ intensità delle parole nel testo.
+ Il risultato, tuttavia, è un valore compreso tra -1 e 1 in quanto viene
+ effettuata una opportuna normalizzazione.
+ In particolare, detta x la somma dei valori delle parole e α un valore
+ di normalizzazione, la funziona utilizzata per effettuare la normalizzazione
+ del risultato è la seguente:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\frac{x}{\sqrt{x^{2}+\alpha}}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Al crescere di x, il valore di normalizzazione di sposta verso 1 (o -1).
+\end_layout
+
+\begin_layout Standard
+Una volta analizzato il testo, vader produce in uscita quuattro valori:
+\end_layout
+
+\begin_layout Itemize
+positive: porzione del testo che cade nella categoria positiva
+\end_layout
+
+\begin_layout Itemize
+negative:porzione del testo che cade nella categoria negativa
+\end_layout
+
+\begin_layout Itemize
+neutral: porzione del testo che cade nella categoria neutra
+\end_layout
+
+\begin_layout Itemize
+compound: somma dei valori delle varie parole (x), normalizzata tra -1 e
+ 1
+\end_layout
+
+\begin_layout Standard
+Per effettuare la sentiment Analysis vader si basa su alcune semplici euristiche
+:
+\end_layout
+
+\begin_layout Itemize
+La prima euristica è la punteggiatura: 
+\begin_inset Quotes eld
+\end_inset
+
+I like it
+\begin_inset Quotes erd
+\end_inset
+
+ e 
+\begin_inset Quotes eld
+\end_inset
+
+I like it!!!!
+\begin_inset Quotes erd
+\end_inset
+
+ sono diversi.
+ Quindi bisogna aumentare il valore delle frasi che hanno i punti esclamativi
+\end_layout
+
+\begin_layout Itemize
+La seconda euristica riguarda la scrittura in maiuscolo: 
+\begin_inset Quotes eld
+\end_inset
+
+AMAZING
+\begin_inset Quotes erd
+\end_inset
+
+ e 
+\begin_inset Quotes eld
+\end_inset
+
+amazing
+\begin_inset Quotes erd
+\end_inset
+
+ sono diverse.
+ Il valore (in positivo o negativo) delle parole in maiuscolo deve essere
+ amplificato
+\end_layout
+
+\begin_layout Itemize
+La terza euristica riguarda i modificatori di grado: ad esempio 
+\begin_inset Quotes eld
+\end_inset
+
+sort of cute
+\begin_inset Quotes erd
+\end_inset
+
+.
+ Vader ha un dizionari proprio per gestire le parole che ammortizzano l'intensit
+à.
+\end_layout
+
+\begin_layout Itemize
+La quarta euristica riguarda l'uso della congiunzione 
+\begin_inset Quotes eld
+\end_inset
+
+but
+\begin_inset Quotes erd
+\end_inset
+
+, in quanto questa collega frasi con 
+\begin_inset Quotes eld
+\end_inset
+
+sentimenti
+\begin_inset Quotes erd
+\end_inset
+
+ contrastanti.
+ Vader implementa proprio un 
+\begin_inset Quotes eld
+\end_inset
+
+but checkers
+\begin_inset Quotes erd
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+TextBlob
+\end_layout
+
+\begin_layout Standard
+manca TEXTBLOB
+\end_layout
+
+\end_body
+\end_document
