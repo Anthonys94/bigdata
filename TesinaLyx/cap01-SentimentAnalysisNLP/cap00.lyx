@@ -319,7 +319,84 @@ TextBlob
 \end_layout
 
 \begin_layout Standard
-manca TEXTBLOB
+TextBlob è una libreria Python utlizzata per l'elaborazione di dati testuali.
+ Essa fornisce una semplice API per la gestione di attività comuni di elaborazio
+ne del linguaggio naturale (NLP) come la generazione di tag di parte del
+ discorso, estrazione di frasi e nomi, analisi del sentiment, classificazione,
+ traduzione e altro.
+ Di seguito è riportato un elenco delle features che caratterizzano Text
+ Blob:
+\end_layout
+
+\begin_layout Itemize
+Noun phrase extraction
+\end_layout
+
+\begin_layout Itemize
+Part-of-speech tagging
+\end_layout
+
+\begin_layout Itemize
+Sentiment analysis Classification (Naive Bayes, Decision Tree)
+\end_layout
+
+\begin_layout Itemize
+Language translation and detection powered by Google Translate
+\end_layout
+
+\begin_layout Itemize
+Tokenization (splitting text into words and sentences)
+\end_layout
+
+\begin_layout Itemize
+Word and phrase frequencies
+\end_layout
+
+\begin_layout Itemize
+Parsing
+\end_layout
+
+\begin_layout Itemize
+n-grams
+\end_layout
+
+\begin_layout Itemize
+Word inflection (pluralization and singularization) and lemmatization
+\end_layout
+
+\begin_layout Itemize
+Spelling correction
+\end_layout
+
+\begin_layout Standard
+In particolare nel nostro progetto è stata sfruttata la potenzialità di
+ questa libreria per stimare la frenqueza delle parole all'interno delle
+ review relative ad una determinata attività di business.
+ La stima è stata effettuata sfruttando quello che è il parsing di stringhe
+ in oggetti di tipo TextBlob.
+ In effetti il parsing è servito per sfruttare due funzioni fondamentali
+ della classe Blob ovvero:
+\end_layout
+
+\begin_layout Itemize
+tags: è una funzione che prende in ingresso una stringa e ritorna una lista
+ di tuple nella forma (word, POS tag).
+ Grazie proprio all'associazione del tag alla parola è possibile filtrare
+ le parole non utili ai fini dell'analisi.
+\end_layout
+
+\begin_layout Itemize
+words: è una funzione che prende in ingresso una stringa e ritorna una lista
+ di word tokens, escludendo i caratteri di punteggiatura.
+ In questo modo si può sfruttare la funzione 
+\begin_inset Quotes eld
+\end_inset
+
+.count(word)
+\begin_inset Quotes erd
+\end_inset
+
+ per contare le occorrenze di una determinata parola in un dato testo.
 \end_layout
 
 \end_body
