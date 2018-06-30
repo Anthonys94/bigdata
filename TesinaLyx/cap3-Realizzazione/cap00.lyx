@@ -138,374 +138,75 @@ morecomment=[s]{--}
 
 \begin_body
 
-\begin_layout Section
-Introduzione
-\end_layout
-
 \begin_layout Standard
-Tale elaborato ha come obiettivo principale quello di effettuare la Sentiment
- Analysis e la Natural Language Processing delle review contenute nel database
- messo a disposizione da Yelp.
- In particolare, il progetto è stato realizzato secondo i seguenti principali:
- 
+In tale capitolo viene riportata la realizzazione del progetto, in particolare
+ si sono implementati i seguenti script:
 \end_layout
 
 \begin_layout Itemize
-
-\emph on
-\noun on
-Definizione del problema: 
-\emph default
-\noun default
-In tale capitolo sono spiegati, in grandi linee, lo scopo del progetto,
- le osservazioni principali che hanno caratterizzato le scelte di progetto
- e le analisi preliminari del contesto e dei dati a disposizione.
- 
-\end_layout
-
-\begin_layout Itemize
-
-\noun on
-Sentiment Analysis
-\noun default
-: In tale capitolo sono messi in evidenza gli strumenti che hanno permesso
- la realizzazione della sentiment Analysis.
-\end_layout
-
-\begin_layout Itemize
-
-\noun on
-Architettura
-\noun default
-: In tale sezione è presentata l'architettura del sistema utilizzato.
-\end_layout
-
-\begin_layout Itemize
-
-\noun on
-Implementazione
-\noun default
-: In tale capitolo viene riportata come l'analisi descritta nelle sezioni
- precedenti è stata implementata, riportando i relativi risultati.
- 
-\end_layout
-
-\begin_layout Section
-Scopo del progetto
-\end_layout
-
-\begin_layout Standard
-Lo scopo del progetto realizzato è quello di estrarre informazioni dai dati
- messi a disposizione al fine di dedurre il loro significato.
- I dati utilizzati sono stati messi a disposizione da YELP, il quale è un
- portale molto popolare che permette di pubblicare recesioni su varie attività
- di business.
- I dati sui quali abbiamo lavorato sono così composti:
-\end_layout
-
-\begin_layout Itemize
-5,2M di recensioni.
-\end_layout
-
-\begin_layout Itemize
-1,3M di utenti.
-\end_layout
-
-\begin_layout Itemize
-147K attività di business.
-\end_layout
-
-\begin_layout Standard
-Nello specifico Yelp ha messo a disposizione 6 file in formato json:
-\end_layout
-
-\begin_layout Enumerate
-user.json: che comprende la lista di utenti di yelp
-\end_layout
-
-\begin_layout Enumerate
-tip.json: che comprende dei 
+sparkWF.py: tale script conta la frequenza delle parole contenute nelle review
+ relative ad un dato business, mettendo in evidenza le parole più frequenti
+ con il proprio grado di 
 \begin_inset Quotes eld
 \end_inset
 
-suggerimenti
-\begin_inset Quotes erd
-\end_inset
-
- forniti dai vari utenti
-\end_layout
-
-\begin_layout Enumerate
-review.json: che comprende le review espresse
-\end_layout
-
-\begin_layout Enumerate
-photos.json: che comprende la lista delle foto messe a disposizione da Yelp
-\end_layout
-
-\begin_layout Enumerate
-checkin.json: che tiene conto delle persone 
-\begin_inset Quotes eld
-\end_inset
-
-servite
-\begin_inset Quotes erd
-\end_inset
-
- dai vari negozi nelle fasce orarie
-\end_layout
-
-\begin_layout Enumerate
-business.json: che comprende la lista dei vari negozi
-\end_layout
-
-\begin_layout Standard
-Yelp è una piattaforma user generated content in cui i contenuti sono prodotti
- dagli utenti che alimentano una comunità virtuale basata sul passaparola
- e sulla fiducia.
- Sfrutta quindi il marketing del passaparola (il cosidetto Wom) consentendo
- alle varie attività di business di espandersi e agli utenti di orientarsi
- più tranquillamente nella scelta dei negozi da 
-\begin_inset Quotes eld
-\end_inset
-
-provare
+positività
 \begin_inset Quotes erd
 \end_inset
 
 .
- 
 \end_layout
 
-\begin_layout Standard
-La nostra analisi, in particolare, si focalizza sulle review espresse dagli
- utenti con lo scopo di riucire ad estrapolare informazioni utili per la
- descrizione delle varie attività di business dal punto di vista della 
+\begin_layout Itemize
+valoreUtente.py: tale script ha il compito di calcolare il valore di importanza
+ attribuito ad un utente.
+\end_layout
+
+\begin_layout Itemize
+valoreReview.py: tale script ha il compito di calcolare il grado di 
 \begin_inset Quotes eld
 \end_inset
 
-reputazione e dell'apprezzamento popolare
+positività
 \begin_inset Quotes erd
 \end_inset
 
-.
- Quindi la nostra analisi si concentra sull'opinione pubblica.
- 
+ del testo di una review.
+\end_layout
+
+\begin_layout Itemize
+tuning.py: tale script ha il compito di effettuare il tuning dei parametri
+ della funzione che stima il valore di opinione pubblica.
+\end_layout
+
+\begin_layout Itemize
+valoreOpinione.py: tale script ha il compito di stimare il valore di opinione
+ pubblica.
+\end_layout
+
+\begin_layout Itemize
+generaCsv.py: tale script è stato realizzato per generare i csv utili ai
+ fini dell'analisi.
+\end_layout
+
+\begin_layout Itemize
+valoreCumulativo.py: tale script ha il compito di stimare il valore cumulativo
+ di opinione pubblica.
+\end_layout
+
+\begin_layout Standard
+In particolare gli script sono presentati di seguito nell'ordine in cui
+ sono stato realizzati ed eseguiti, in quanto tale ordine rappresenta il
+ processo di analisi condotto per la realizzazione del progetto.
 \end_layout
 
 \begin_layout Section
-Analisi dei dati
+valoreUtente.py
 \end_layout
 
 \begin_layout Standard
-In tale paragrafo viene riportata l'analisi dei dati messi a disposizione
- da Yelp.
- Non sono stati considerati tutti i file, ma solo quelli necessari ai fini
- del progetto.
- In particolare i file checkin.json e photos.json sono stati eliminati fin
- da subito in quanto non sono stati reputati utili.
- Il file tip.json, contenente i suggerimenti dell'utente, invece, è stato
- analizzato e si è visto che tali suggerimenti non sono stati considerati
- dagli altri user e quindi il suo valore è considerato trascurabile nell'analisi
- dell'opinione pubblica.
- 
-\end_layout
-
-\begin_layout Subsection
-File user.json
-\end_layout
-
-\begin_layout Standard
-Tale file contiene la descrizione degli utenti.
- Un un utente ha la seguente struttura:
-\end_layout
-
-\begin_layout Standard
-\begin_inset Graphics
-	filename img/user.PNG
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-Un utente, quindi, oltre ai dati personali, presenta delle caratteristiche
- che esprimono la sua popolarità, come ad esempio i complimenti ricevuti,
- il numero di amici e fans.
- Una delle caratteristiche fondamentali di un 
-\begin_inset Quotes eld
-\end_inset
-
-buon utente
-\begin_inset Quotes erd
-\end_inset
-
- è l'attributo elite.
- Lo status di elite si conquista attraverso recensioni ben scritte, foto
- di qualità, assiduità nell'inviare complimenti verso gli altri Yelper.
- Per far parte della squadra Elite si deve utilizzare il vero nome, completare
- il proprio profilo con informazioni dettagliate e postare una foto che
- identifichi chiaramente l’identità.
-\end_layout
-
-\begin_layout Subsection
-File review.json
-\end_layout
-
-\begin_layout Standard
-Tale file contiene le varie recensioni.
- Una recensione ha la seguente struttura:
-\end_layout
-
-\begin_layout Standard
-\begin_inset Graphics
-	filename img/review.PNG
-	scale 70
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Subsection
-File business.json
-\end_layout
-
-\begin_layout Standard
-Tale file comprende le varie attività di business.
- Una attività di business ha la seguente stuttura:
-\end_layout
-
-\begin_layout Standard
-\begin_inset Graphics
-	filename img/business.PNG
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Section
-Analisi del contesto
-\end_layout
-
-\begin_layout Standard
-Al fine di entrare in familiarità con l'analisi effettuata è necessario
- specificare alcuni concetti che sono indispensabili nella comprensione
- del progetto:
-\end_layout
-
-\begin_layout Itemize
-Che cosa è una review? Cosa significa analizzarla?
-\end_layout
-
-\begin_layout Itemize
-Quali sono le caratteristiche rilevanti di un utente? 
-\end_layout
-
-\begin_layout Itemize
-Cosa si intende per 
-\begin_inset Quotes eld
-\end_inset
-
-opinione pubblica
-\begin_inset Quotes erd
-\end_inset
-
-?
-\end_layout
-
-\begin_layout Subsection
-Concetto di Review
-\end_layout
-
-\begin_layout Standard
-Una review è un'opinione soggettiva espressa da un utente circa un'attività
- di business al fine di mettere in risalto le sue caratteristiche principali
- in termini sia positivi che negativi.
- In particolare una recensione è rivolta a potenziali clienti e quindi la
- sua funzione deve essere quella di aiutarli a decidere se scegliere o meno
- un determinato negozio, fornando indicazioni sulla sua qualità e sul suo
- contenuto.
- 
-\end_layout
-
-\begin_layout Standard
-Quindi una recensione influenza inevitabilmente il pensiero di un utente
- che la legge e quindi ha un impatto su quella che viene considerata 
-\begin_inset Quotes eld
-\end_inset
-
-opinione pubblica
-\begin_inset Quotes erd
-\end_inset
-
-.
- 
-\end_layout
-
-\begin_layout Subsection
-Concetto di utente
-\end_layout
-
-\begin_layout Standard
-In questo contesto, un utente è una entità che ha la facoltà di recensire
- una attività di business oppure esprimere il pensiero sulle recensioni
- espresse da altre utenti, confermandole o contraddicendole.
- 
-\end_layout
-
-\begin_layout Standard
-Un utente di Yelp ha una propria scheda dove sono riportati i propri dati
- personali e una serie di attributi che permettono la caratterizzazione
- di un 
-\begin_inset Quotes eld
-\end_inset
-
-buon utente
-\begin_inset Quotes erd
-\end_inset
-
-.
- In effetti consideriamo buono, un utente con le seguenti caratteristiche:
-\end_layout
-
-\begin_layout Itemize
-è un utente elite: quindi la sua contribuzione al sito è stata riconosciuta
- dal portale
-\end_layout
-
-\begin_layout Itemize
-ha un numero elevato di fans e quindi ciò implica che è una persona popolare
-\end_layout
-
-\begin_layout Itemize
-ha scritto un numero elevato di recensioni e ciò implica che l'utente è
- molto attivo nella community di Yelp
-\end_layout
-
-\begin_layout Itemize
-ha molto amici
-\end_layout
-
-\begin_layout Itemize
-ha ricevuto molti riconoscimenti (useful, cool, funny ) e complimenti da
- parte di altri user.
- 
-\end_layout
-
-\begin_layout Standard
-In definitiva consideriamo buono un utente la cui 
-\begin_inset Quotes eld
-\end_inset
-
-parola
-\begin_inset Quotes erd
-\end_inset
-
- è capace di influenzare l'opinione pubblica, sia in positivo che in negativo.
- Ciò signifca che una recensione espressa da un utente 
+Tale script è stato realizzato per poter calcolare il valore di ogni utente.
+ Nel contesto di tale progetto, un utente viene considerato 
 \begin_inset Quotes eld
 \end_inset
 
@@ -513,93 +214,242 @@ buono
 \begin_inset Quotes erd
 \end_inset
 
- merita un peso maggiore in quanto essa risulta essere in un certo senso
- 
+, e quindi con un valore alto, se è 
 \begin_inset Quotes eld
 \end_inset
 
-garantita
+attivo
 \begin_inset Quotes erd
 \end_inset
 
- .
- In pratica un utente è buono se di lui ci si può fidare.
- 
+ nella community e pertanto presenta le seguenti caratteristiche:
 \end_layout
 
-\begin_layout Subsection
-Concetto di opinione pubblica
+\begin_layout Enumerate
+E' un utente Elite: ciò significa che la community ha premiato il suo modo
+ di operare.
+\end_layout
+
+\begin_layout Enumerate
+E' un utente con un numero elevato di fans.
+\end_layout
+
+\begin_layout Enumerate
+E' un utente con un numero elevato di amici.
+\end_layout
+
+\begin_layout Enumerate
+E' un utente con un numero elevato di review scritte.
+\end_layout
+
+\begin_layout Enumerate
+E' un utente che è stato per diversi anni eletto Elite.
+\end_layout
+
+\begin_layout Enumerate
+E' un utente che ha ricevuto molti compliementi da altri.
 \end_layout
 
 \begin_layout Standard
-Si definisce opinione pubblica il giudizio o modo di pensare collettivo
- della maggioranza dei clienti di una attività di business.
- Lo studio dell'opinione pubblica risulta molto importante ai fini di un
- business in quanto vale il seguente concetto:
+Prendendo in considerazione tali fattori, il valore dell'utente è stato
+ calcolato in forma chiusa con una relazione che stima il valore di un utente
+ in base alle caratteristiche sopra elencate.
+ In particolare ad un utente che non possiede tali caratteristiche viene
+ associato un valore molto basso.
+ Tale ragionamento è stato effettuato al fine di poter riconoscere degli
+ utenti fake, i quali effettuano delle recensioni non veritiere.
+ In effetti a nostro avviso un utente ha una elevata probabilità di essere
+ fake se ha le seguenti caratteristiche:
+\end_layout
+
+\begin_layout Enumerate
+Ha poche recensioni, con stelle elevate e magari tutte relative ad un'unica
+ attività di business.
+\end_layout
+
+\begin_layout Enumerate
+Non ha amici , ne fans.
+\end_layout
+
+\begin_layout Enumerate
+Non è mai stato eletto Elite.
+\end_layout
+
+\begin_layout Section
+valoreReview.py
 \end_layout
 
 \begin_layout Standard
-
-\emph on
-il pensiero di un utente in relazione ad una attività di business, della
- quale non sa nulla (perchè non vi è mai stato), è fortemente influenzato
- dall'opimione pubblica.
- Praticamente l'opinione pubblica diventa il pensiero di base che l'utente
- ha senza la conoscenza diretta del nagozio.
-
-\emph default
- 
+Tale script è stato realizzato per poter calcolare il grado di positività
+ del testo contenuto in una determinata review.
+ In particolare si è fatto uso della libreria NLTK di Python, al fine di
+ analizzare il testo.
+ Il punteggio ritornato viene calcolato effettuando la media dei punteggi
+ attribuiti alle varie frasi.
+ Successivamente al punteggio attribuito dalla libreria viene sommato il
+ contributo relativo alle stelle associate alla review da parte dell'utente.
+ In effetti le stelle sono state considerate parte integrante dell'opinione
+ dell'autore e queste sono state normalizzate al fine di ricadere nel range
+ [-1,1].
+ In particolare è stata fatta la seguente normalizzazione:
 \end_layout
 
 \begin_layout Standard
-Quindi negozi di cui si parla bene, sono facilitati nell'attirare i clienti,
- mentre, al contrario, è molto difficile che un cliente si rechi in un posto
- di cui si 
-\begin_inset Quotes eld
+\begin_inset Tabular
+<lyxtabular version="3" rows="6" columns="2">
+<features tabularvalignment="middle">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Stelle
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Valore normalizzato
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+5
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+1
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+4
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+0,5
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+3
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+0
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+2
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+-0,5
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+1
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+-1
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
 \end_inset
 
-parla male
-\begin_inset Quotes erd
-\end_inset
-
-.
-\end_layout
-
-\begin_layout Standard
-In effetti il nostro scopo è proprio quello di studiare l'opinione pubblica
- di una attività di business, cercando di quantificarla nel miglior modo
- possibile, prendendo in considerazione tutti i possibili fattori di influenza.
- 
-\end_layout
-
-\begin_layout Standard
-Alla base di un'opinione pubblica vi sono le recensioni scritte dai vari
- utenti; tuttavia l'opinione pubblica dipende non solo da ciò che è stato
- scritto, ma anche da 
-\begin_inset Quotes eld
-\end_inset
-
-chi
-\begin_inset Quotes erd
-\end_inset
-
- lo ha scritto e da quanto successo ha riscosso.
- Pertanto una stima preliminare dell'opinione pubblica è data dalla seguente
- relazione:
-\end_layout
-
-\begin_layout Standard
-\begin_inset Formula $Vopinione=ContributoRecensione*ContributoUtente*SuccessoRecensione$
-\end_inset
-
 
 \end_layout
 
 \begin_layout Standard
-Analizziamo quindi i tre fattori:
+L'output di tale script viene memorizzato in una collection del database,
+ la quale è costituita da documenti ognuno dei quali rappresenta la forma
+ sintetica di una review, in quanto non compare più il testo, ma il relativo
+ punteggio e all'id dell'utente viene associato anche il punteggio relativo
+ a quest'ultimo.
+ Tali informazioni sono necessarie in quanto verranno utilizzate solo dopo
+ aver trovato i parametri migliori della funzione di opnione pubblica.
+ Di seguito è riportato il listato relativo a tale script:
 \end_layout
 
-\begin_layout Itemize
+\begin_layout Section
+tuning.py
+\end_layout
+
+\begin_layout Standard
+Tale script è stato realizzato per poter effettuare il tuning dei parametri
+ relativi alla formula che permette di stimare il valore dell'opinione pubblica.
+ Come già anticipato nel capitolo 1, l'opinione pubblica è funzione di 3
+ elementi fondamentali:
+\end_layout
+
+\begin_layout Enumerate
 ContributoRecensione: è il contributo espresso dalla recensione costitutito
  da due elementi:
 \end_layout
@@ -616,7 +466,7 @@ Testo: testo in linguaggio naturale espresso dall'utente.
 \end_layout
 
 \end_deeper
-\begin_layout Itemize
+\begin_layout Enumerate
 ContributoUtente: è il peso associato a chi ha scritto la recensione.
  In effetti ogni pensiero viene sempre pesato in base al suo autore, per
  questo motivo una recensione scritta da un utente 
@@ -631,35 +481,113 @@ buono
  
 \end_layout
 
-\begin_layout Itemize
+\begin_layout Enumerate
 SuccessoRecensione: è il peso associato a quanto popolare è stata quella
  recensione.
  In effetti una recensione che ha avuto molto successo in quanto è stata
  letta e presa in considerazione da molti utenti, ha inevitabilmente un
  impatto maggiore sull'opinione pubblica.
- 
 \end_layout
 
 \begin_layout Standard
-Grazie alla relazione scritta, siamo in grado di quantificare l'opinione
- pubblica di una recenzione scritta da un cliente dell'attività di business,
- in quanto abbiamo proprio pesato la recensione in base a chi l'ha scritta
- e al suo successo.
+In particolare il successo della recensione è costituito dai tre fattori
  
+\begin_inset Quotes eld
+\end_inset
+
+cool, funny, useful
+\begin_inset Quotes erd
+\end_inset
+
+, che rappresentano degli apprezzamenti effettuati da altri utenti.
+ Ad ognuno dei tre fattori è stato attribuito un peso, rispettivamente 
+\begin_inset Quotes eld
+\end_inset
+
+alpha, beta, gamma
+\begin_inset Quotes erd
+\end_inset
+
+, e pertanto la formula che stima il valore di opinione pubblica è:
 \end_layout
 
 \begin_layout Standard
+\begin_inset Formula $Vopinione=ContributoRecensione*(1+ContributoUtente)*(1+\alpha*useful+\beta*cool+\gamma*funny)$
+\end_inset
 
-\emph on
-Ma cosa accade se un utente che non è e non è mai stato cliente dell'attività
- recensita legge le varie review? 
+
 \end_layout
 
 \begin_layout Standard
-Ovviamente tale utente verrà influenzato da ciò che gli altri hanno detto.
- Quest'ultimo leggerà le varie review, ma come è possibile intuire, quelle
- che avranno una maggiore considerazione sono le recensioni più recenti.
- 
+Il fattore 1 è stato aggiunto al fine di evitare i casi in cui il contributo
+ utente, oppure il contributo di successo, sono nulli.
+ Nello specifico: 
+\end_layout
+
+\begin_layout Itemize
+Contributo recensione: è un valore che è compreso nel range [-1,1]
+\end_layout
+
+\begin_layout Itemize
+Contributo utente: è un valore che è stato normalizzato nel range [0,10]
+\end_layout
+
+\begin_layout Itemize
+Successo recensione: è un valore che è stato normalizzato nel range [0,10]
+\end_layout
+
+\begin_layout Standard
+Da quanto detto si evince che il contributo della recensione può essere
+ solo amplificato in modulo dai restanti fattori moltiplicativi, e quindi
+ una recensione positiva scritta da un utente 
+\begin_inset Quotes eld
+\end_inset
+
+buono
+\begin_inset Quotes erd
+\end_inset
+
+ e apprezzata, avrà un valore di opinione più alto rispetto al suo valore
+ di base.
+ Ciò significa che il valore di opinione conserva il segno del contributo
+ di recensione di partenza.
+\end_layout
+
+\begin_layout Standard
+Il tuning dei parametri è stato effettuato considerando che valori sempre
+ crescenti di useful, funny e cool, portano ad un aumento del valore di
+ opinione.
+ Quindi sono stati determinati i valori di aplha beta e gamma che massimizzano
+ il valore di opinione pubblica di una review e ciò è stato realizzato andando
+ a determinare le triple di valori che massimizzano ogni review, ed è stata
+ scelta la tripla con frequenza maggiore.
+ Di seguito è riportato il listato relativo allo script:
+\end_layout
+
+\begin_layout Section
+valoreOpinione.py
+\end_layout
+
+\begin_layout Standard
+Tale script è stato realizzato al fine di determinare il valore di opinione
+ di una determinata review.
+\end_layout
+
+\begin_layout Section
+valoreCumulativo.py
+\end_layout
+
+\begin_layout Standard
+Tale script è stato realizzato al fine di determinare il valore cumulativo
+ dell'opinione pubblica.
+ Ciò è stato fatto per cercare di modellare quello che è il pensiero di
+ un utente che si trova a leggere delle review di un relativo business.
+ In particolare il comportamento modellato è il seguente: si associa un'importan
+za maggiore alle review più attuali, e alle review precedenti si associa
+ un'importanza man mano sempre più piccola.
+ Quindi il pensiero dell'utente sarà influenzato dalle review appena lette
+ a cui viene aggiunto un contributo dovuto alle review lette precedentemente.
+ Di seguito è riportato il listato relativo a tale script: 
 \end_layout
 
 \end_body

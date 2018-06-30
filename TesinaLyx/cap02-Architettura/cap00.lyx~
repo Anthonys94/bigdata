@@ -138,527 +138,251 @@ morecomment=[s]{--}
 
 \begin_body
 
-\begin_layout Section
-Introduzione
-\end_layout
-
 \begin_layout Standard
-Tale elaborato ha come obiettivo principale quello di effettuare la Sentiment
- Analysis e la Natural Language Processing delle review contenute nel database
- messo a disposizione da Yelp.
- In particolare, il progetto è stato realizzato secondo i seguenti principali:
- 
+In tale capitolo è riportata l'architettura con il relativo stack tecnologico
+ utilizzato ai fini della realizzazione del progetto.
+ In paricolare sono stati utilizzati i seguenti componenti:
 \end_layout
 
 \begin_layout Itemize
-
-\emph on
-\noun on
-Definizione del problema: 
-\emph default
-\noun default
-In tale capitolo sono spiegati, in grandi linee, lo scopo del progetto,
- le osservazioni principali che hanno caratterizzato le scelte di progetto
- e le analisi preliminari del contesto e dei dati a disposizione.
- 
+Microsoft Azure: è una piattaforma cloud pubblica di Microsoft, che offre
+ servizi di cloud computing.
 \end_layout
 
 \begin_layout Itemize
-
-\noun on
-Sentiment Analysis
-\noun default
-: In tale capitolo sono messi in evidenza gli strumenti che hanno permesso
- la realizzazione della sentiment Analysis.
+MongoDB: è un DBMS non relazionale (NoSQL), orientato ai documenti.
 \end_layout
 
 \begin_layout Itemize
-
-\noun on
-Architettura
-\noun default
-: In tale sezione è presentata l'architettura del sistema utilizzato.
-\end_layout
-
-\begin_layout Itemize
-
-\noun on
-Implementazione
-\noun default
-: In tale capitolo viene riportata come l'analisi descritta nelle sezioni
- precedenti è stata implementata, riportando i relativi risultati.
- 
+Apache Spark: è un framework open source per il calcolo distribuito.
 \end_layout
 
 \begin_layout Section
-Scopo del progetto
+Microsoft Azure
 \end_layout
 
 \begin_layout Standard
-Lo scopo del progetto realizzato è quello di estrarre informazioni dai dati
- messi a disposizione al fine di dedurre il loro significato.
- I dati utilizzati sono stati messi a disposizione da YELP, il quale è un
- portale molto popolare che permette di pubblicare recesioni su varie attività
- di business.
- I dati sui quali abbiamo lavorato sono così composti:
-\end_layout
-
-\begin_layout Itemize
-5,2M di recensioni.
-\end_layout
-
-\begin_layout Itemize
-1,3M di utenti.
-\end_layout
-
-\begin_layout Itemize
-147K attività di business.
-\end_layout
-
-\begin_layout Standard
-Nello specifico Yelp ha messo a disposizione 6 file in formato json:
-\end_layout
-
-\begin_layout Enumerate
-user.json: che comprende la lista di utenti di yelp
-\end_layout
-
-\begin_layout Enumerate
-tip.json: che comprende dei 
-\begin_inset Quotes eld
-\end_inset
-
-suggerimenti
-\begin_inset Quotes erd
-\end_inset
-
- forniti dai vari utenti
-\end_layout
-
-\begin_layout Enumerate
-review.json: che comprende le review espresse
-\end_layout
-
-\begin_layout Enumerate
-photos.json: che comprende la lista delle foto messe a disposizione da Yelp
-\end_layout
-
-\begin_layout Enumerate
-checkin.json: che tiene conto delle persone 
-\begin_inset Quotes eld
-\end_inset
-
-servite
-\begin_inset Quotes erd
-\end_inset
-
- dai vari negozi nelle fasce orarie
-\end_layout
-
-\begin_layout Enumerate
-business.json: che comprende la lista dei vari negozi
-\end_layout
-
-\begin_layout Standard
-Yelp è una piattaforma user generated content in cui i contenuti sono prodotti
- dagli utenti che alimentano una comunità virtuale basata sul passaparola
- e sulla fiducia.
- Sfrutta quindi il marketing del passaparola (il cosidetto Wom) consentendo
- alle varie attività di business di espandersi e agli utenti di orientarsi
- più tranquillamente nella scelta dei negozi da 
-\begin_inset Quotes eld
-\end_inset
-
-provare
-\begin_inset Quotes erd
-\end_inset
-
-.
+Come detto precedentemente Azure è una piattaforma cloud pubblica di Microsoft,
+ che offre servizi di cloud computing.
+ Tramite essa vengono erogati servizi appartenenti a diverse categorie quali:
+ risorse di elaborazione, archiviazione e memorizzazione dati, trasmissione
+ dati e interconnessione di reti, analisi, intelligence, monitoraggio e
+ gestione, nonchè servizi per lo sviluppo di applicazioni.
+ In particolare i servizi messi a disposizione possono essere classificati
+ in tre specifiche aree, a seconda della modalità di erogazione adottata:
  
 \end_layout
 
+\begin_layout Itemize
+Infrastructure-as-a-Service (IaaS)
+\end_layout
+
+\begin_layout Itemize
+Platform-as-a-Service (PaaS)
+\end_layout
+
+\begin_layout Itemize
+Software-as-a-Service (SaaS)
+\end_layout
+
 \begin_layout Standard
-La nostra analisi, in particolare, si focalizza sulle review espresse dagli
- utenti con lo scopo di riucire ad estrapolare informazioni utili per la
- descrizione delle varie attività di business dal punto di vista della 
-\begin_inset Quotes eld
-\end_inset
+Ciascun servizio erogato prevede un pagamento in base al consumo e la metodologi
+a con cui ne viene determinato il costo è specifica per il servizio stesso.
+ Ai fini del nostro progetto si è sfruttata tale piattaforma per usufruire
+ di una macchina virtuale con le seguenti caratteristiche:
+\end_layout
 
-reputazione e dell'apprezzamento popolare
-\begin_inset Quotes erd
-\end_inset
+\begin_layout Itemize
+Sistema operativo: Linux Ubuntu 17.04
+\end_layout
 
-.
- Quindi la nostra analisi si concentra sull'opinione pubblica.
- 
+\begin_layout Itemize
+8 core , 16GB di memoria
+\end_layout
+
+\begin_layout Itemize
+Processore Intel Xeon E5
 \end_layout
 
 \begin_layout Section
-Analisi dei dati
+MongoDB
 \end_layout
 
 \begin_layout Standard
-In tale paragrafo viene riportata l'analisi dei dati messi a disposizione
- da Yelp.
- Non sono stati considerati tutti i file, ma solo quelli necessari ai fini
- del progetto.
- In particolare i file checkin.json e photos.json sono stati eliminati fin
- da subito in quanto non sono stati reputati utili.
- Il file tip.json, contenente i suggerimenti dell'utente, invece, è stato
- analizzato e si è visto che tali suggerimenti non sono stati considerati
- dagli altri user e quindi il suo valore è considerato trascurabile nell'analisi
- dell'opinione pubblica.
- 
-\end_layout
-
-\begin_layout Subsection
-File user.json
-\end_layout
-
-\begin_layout Standard
-Tale file contiene la descrizione degli utenti.
- Un un utente ha la seguente struttura:
+MongoDB è un database NoSQL orientato ai documenti, che nasce nel 2007 in
+ California come servizio da utilizzare nell’ambito di un progetto più ampio,
+ ma che presto è diventato un prodotto indipendente ed open-source.
+ Esso memorizza i documenti in JSON, formato basato su JavaScript e più
+ semplice di XML, ma comunque dotato di una buona espressività.
+ Esso quindi si allontana dalla struttura tradizionale basata su tabelle
+ dei database relazionali in favore di documenti in stile JSON con schema
+ dinamico, rendendo l'integrazione di dati di alcuni tipi di applicazioni
+ più facile e veloce.
+ Come detto precedentemente, mongoDB è un database orientato ai documenti,
+ ma cosa è un documento? Un docuemnto è fondamentalmente un albero che può
+ contenere molti dati, anche annidati.
+ I documenti sono raggruppati in collezioni che possono essere anche eterogenee.
+ Ciò significa che non c'è uno schema fisso per i documenti.
+ Tra le collezioni non ci sono relazioni o legami garantiti da MongoDB:
+ in altre parole, non esiste un concetto analogo al vincolo di integrità
+ referenziale.
 \end_layout
 
 \begin_layout Standard
-\begin_inset Graphics
-	filename img/user.PNG
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-Un utente, quindi, oltre ai dati personali, presenta delle caratteristiche
- che esprimono la sua popolarità, come ad esempio i complimenti ricevuti,
- il numero di amici e fans.
- Una delle caratteristiche fondamentali di un 
-\begin_inset Quotes eld
-\end_inset
-
-buon utente
-\begin_inset Quotes erd
-\end_inset
-
- è l'attributo elite.
- Lo status di elite si conquista attraverso recensioni ben scritte, foto
- di qualità, assiduità nell'inviare complimenti verso gli altri Yelper.
- Per far parte della squadra Elite si deve utilizzare il vero nome, completare
- il proprio profilo con informazioni dettagliate e postare una foto che
- identifichi chiaramente l’identità.
-\end_layout
-
-\begin_layout Subsection
-File review.json
-\end_layout
-
-\begin_layout Standard
-Tale file contiene le varie recensioni.
- Una recensione ha la seguente struttura:
-\end_layout
-
-\begin_layout Standard
-\begin_inset Graphics
-	filename img/review.PNG
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Subsection
-File business.json
-\end_layout
-
-\begin_layout Standard
-Tale file comprende le varie attività di business.
- Una attività di business ha la seguente stuttura:
-\end_layout
-
-\begin_layout Standard
-\begin_inset Graphics
-	filename img/business.PNG
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Section
-Analisi del contesto
-\end_layout
-
-\begin_layout Standard
-Al fine di entrare in familiarità con l'analisi effettuata è necessario
- specificare alcuni concetti che sono indispensabili nella comprensione
- del progetto:
+Modello logico a parte, le caratteristiche chiave di MongoDB sono:
 \end_layout
 
 \begin_layout Itemize
-Che cosa è una review? Cosa significa analizzarla?
-\end_layout
-
-\begin_layout Itemize
-Quali sono le caratteristiche rilevanti di un utente? 
-\end_layout
-
-\begin_layout Itemize
-Cosa si intende per 
-\begin_inset Quotes eld
-\end_inset
-
-opinione pubblica
-\begin_inset Quotes erd
-\end_inset
-
-?
-\end_layout
-
-\begin_layout Subsection
-Concetto di Review
-\end_layout
-
-\begin_layout Standard
-Una review è un'opinione soggettiva espressa da un utente circa un'attività
- di business al fine di mettere in risalto le sue caratteristiche principali
- in termini sia positivi che negativi.
- In particolare una recensione è rivolta a potenziali clienti e quindi la
- sua funzione deve essere quella di aiutarli a decidere se scegliere o meno
- un determinato negozio, fornando indicazioni sulla sua qualità e sul suo
- contenuto.
- 
-\end_layout
-
-\begin_layout Standard
-Quindi una recensione influenza inevitabilmente il pensiero di un utente
- che la legge e quindi ha un impatto su quella che viene considerata 
-\begin_inset Quotes eld
-\end_inset
-
-opinione pubblica
-\begin_inset Quotes erd
-\end_inset
-
-.
- 
-\end_layout
-
-\begin_layout Subsection
-Concetto di utente
-\end_layout
-
-\begin_layout Standard
-In questo contesto, un utente è una entità che ha la facoltà di recensire
- una attività di business oppure esprimere il pensiero sulle recensioni
- espresse da altre utenti, confermandole o contraddicendole.
- 
-\end_layout
-
-\begin_layout Standard
-Un utente di Yelp ha una propria scheda dove sono riportati i propri dati
- personali e una serie di attributi che permettono la caratterizzazione
- di un 
-\begin_inset Quotes eld
-\end_inset
-
-buon utente
-\begin_inset Quotes erd
-\end_inset
-
-.
- In effetti consideriamo buono, un utente con le seguenti caratteristiche:
-\end_layout
-
-\begin_layout Itemize
-è un utente elite: quindi la sua contribuzione al sito è stata riconosciuta
- dal portale
-\end_layout
-
-\begin_layout Itemize
-ha un numero elevato di fans e quindi ciò implica che è una persona popolare
-\end_layout
-
-\begin_layout Itemize
-ha scritto un numero elevato di recensioni e ciò implica che l'utente è
- molto attivo nella community di Yelp
-\end_layout
-
-\begin_layout Itemize
-ha molto amici
-\end_layout
-
-\begin_layout Itemize
-ha ricevuto molti riconoscimenti (useful, cool, funny ) e complimenti da
- parte di altri user.
- 
-\end_layout
-
-\begin_layout Standard
-In definitiva consideriamo buono un utente la cui 
-\begin_inset Quotes eld
-\end_inset
-
-parola
-\begin_inset Quotes erd
-\end_inset
-
- è capace di influenzare l'opinione pubblica, sia in positivo che in negativo.
- Ciò signifca che una recensione espressa da un utente 
-\begin_inset Quotes eld
-\end_inset
-
-buono
-\begin_inset Quotes erd
-\end_inset
-
- merita un peso maggiore in quanto essa risulta essere in un certo senso
- 
-\begin_inset Quotes eld
-\end_inset
-
-garantita
-\begin_inset Quotes erd
-\end_inset
-
- .
- In pratica un utente è buono se di lui ci si può fidare.
- 
-\end_layout
-
-\begin_layout Subsection
-Concetto di opinione pubblica
-\end_layout
-
-\begin_layout Standard
-Si definisce opinione pubblica il giudizio o modo di pensare collettivo
- della maggioranza dei clienti di una attività di business.
- Lo studio dell'opinione pubblica risulta molto importante ai fini di un
- business in quanto vale il seguente concetto:
-\end_layout
-
-\begin_layout Standard
-
-\emph on
-il pensiero di un utente in relazione ad una attività di business, della
- quale non sa nulla (perchè non vi è mai stato), è fortemente influenzato
- dall'opimione pubblica.
- Praticamente l'opinione pubblica diventa il pensiero di base che l'utente
- ha senza la conoscenza diretta del nagozio.
-
-\emph default
- 
-\end_layout
-
-\begin_layout Standard
-Quindi negozi di cui si parla bene, sono facilitati nell'attirare i clienti,
- mentre, al contrario, è molto difficile che un cliente si rechi in un posto
- di cui si 
-\begin_inset Quotes eld
-\end_inset
-
-parla male
-\begin_inset Quotes erd
-\end_inset
-
-.
-\end_layout
-
-\begin_layout Standard
-In effetti il nostro scopo è proprio quello di studiare l'opinione pubblica
- di una attività di business, cercando di quantificarla nel miglior modo
- possibile, prendendo in considerazione tutti i possibili fattori di influenza.
- 
-\end_layout
-
-\begin_layout Standard
-Alla base di un'opinione pubblica vi sono le recensioni scritte dai vari
- utenti; tuttavia l'opinione pubblica dipende non solo da ciò che è stato
- scritto, ma anche da 
-\begin_inset Quotes eld
-\end_inset
-
-chi
-\begin_inset Quotes erd
-\end_inset
-
- lo ha scritto e da quanto successo ha riscosso.
- Pertanto una stima preliminare dell'opinione pubblica è data dalla seguente
- relazione:
-\end_layout
-
-\begin_layout Standard
-\begin_inset Formula $Vopinione=ContributoRecensione*ContributoUtente*SuccessoRecensione$
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-Analizziamo quindi i tre fattori:
-\end_layout
-
-\begin_layout Itemize
-ContributoRecensione: è il contributo espresso dalla recensione costitutito
- da due elementi:
+Query ad hoc:
 \end_layout
 
 \begin_deeper
 \begin_layout Itemize
-Stelline: è una metrica di valutazione (da 1 a 5) da parte di un utente
-\end_layout
-
-\begin_layout Itemize
-Testo: testo in linguaggio naturale espresso dall'utente.
- Tale elemento, processato opportunamente, quantifica la positività o negatività
- del pensiero dell'utente.
+MongoDB supporta ricerche per campi, intervalli e regular expression.
+ Le query possono restituire campi specifici del documento e anche includere
+ funzioni definite dall'utente in JavaScript.
 \end_layout
 
 \end_deeper
 \begin_layout Itemize
-ContributoUtente: è il peso associato a chi ha scritto la recensione.
- In effetti ogni pensiero viene sempre pesato in base al suo autore, per
- questo motivo una recensione scritta da un utente 
-\begin_inset Quotes eld
-\end_inset
+Indicizzazione:
+\end_layout
 
-buono
-\begin_inset Quotes erd
-\end_inset
+\begin_deeper
+\begin_layout Itemize
+qualunque campo in MongoDB può essere indicizzato (gli indici in MongoDB
+ sono concettualmente similari a quelli dei tradizionali RDBMS).
+ Sono disponibili anche indici secondari, indici unici, indici sparsi, indici
+ geospaziali e indici full text.
+\end_layout
 
-, come precedentemente spiegato, ha un impatto maggiore sull'opinione pubblica.
- 
+\end_deeper
+\begin_layout Itemize
+Alta Affidabilità:
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+MongoDB fornisce alta disponibilità e aumento del carico gestito attraverso
+ i replica set.
+ Un replica set consiste in due o più copie dei dati.
+ Ogni replica può avere il ruolo di copia primaria o secondaria in qualunque
+ momento.
+ La replica primaria effettua tutte le scritture e le letture.
+ Le repliche secondarie mantengono una copia dei dati della replica primaria
+ attraverso un meccanismo di replicazione incluso nel prodotto.
+ Quando una replica primaria fallisce, il replica set inizia automaticamente
+ un processo di elezione per determinare quale replica secondaria deve diventare
+ primaria.
+ Le copie secondarie possono anche effettuare letture, con dati eventualmente
+ consistenti di default.
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Sharding e bilanciamento dei dati: 
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+MongoDB scala orizzontalmente usando lo sharding.
+ L'utente deve scegliere una chiave di sharding, che determina come i dati
+ di una collection saranno distribuiti tra i vari nodi.
+ I dati sono divisi in intervalli (basati sulla chiave di shard) e distribuiti
+ su molteplici shard (uno shard è un replica set, quindi con una replica
+ primaria e due o più repliche secondarie).
 \end_layout
 
 \begin_layout Itemize
-SuccessoRecensione: è il peso associato a quanto popolare è stata quella
- recensione.
- In effetti una recensione che ha avuto molto successo in quanto è stata
- letta e presa in considerazione da molti utenti, ha inevitabilmente un
- impatto maggiore sull'opinione pubblica.
- 
+MongoDB include un meccanismo di bilanciamento dei dati, spostando gli intervall
+i di dati da uno shard troppo carico ad uno shard meno carico, in modo da
+ bilanciare la distribuzione dei dati all'interno del cluster.
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+File Storage:
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+MongoDB può essere usato anche come un file system, traendo vantaggio dalla
+ caratteristiche di replicazione e di bilanciamento su più server per memorizzar
+e file, anche di grandi dimensioni.
+\end_layout
+
+\begin_layout Itemize
+Questa funzione, chiamata GridFS, è inclusa nei drivers di MongoDB e disponibile
+ facilmente per tantissimi linguaggi di sviluppo.
+ MongoDB espone delle funzioni per la manipolazione dei file.
+ GridFS è usato, ad esempio, nei plugin di NGINX e lighttpd.
+ Invece di memorizzare il file in un singolo documento, GridFS divide il
+ file in tante parti più piccole, chiamate chunks, e memorizza ognuno di
+ questi chunk in un documento separato.
+\end_layout
+
+\begin_layout Itemize
+Ai file possono essere associati dei metadati, su cui è possibile anche
+ creare degli indici full-text.
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Aggregazione:
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+MongoDB supporta due modalità di aggregazione dei dati: il MapReduce e l'Aggregr
+ation Framework.
+ Quest'ultimo lavora come una pipeline e permette di ottenere risultati
+ molto più rapidamente del MapReduce grazie all'implementazione in C++.
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Capped Collection: 
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+MongoDB supporta collection a dimensioni fisse chiamate capped collection.
+ Questo tipo di collection mantengono l'ordine di inserimento e una volta
+ raggiunta la dimensione definita, si comportano come code circolari.
+\end_layout
+
+\end_deeper
+\begin_layout Section
+Spark
 \end_layout
 
 \begin_layout Standard
-Grazie alla relazione scritta, siamo in grado di quantificare l'opinione
- pubblica di una recenzione scritta da un cliente dell'attività di business,
- in quanto abbiamo proprio pesato la recensione in base a chi l'ha scritta
- e al suo successo.
- 
-\end_layout
-
-\begin_layout Standard
-
-\emph on
-Ma cosa accade se un utente che non è e non è mai stato cliente dell'attività
- recensita legge le varie review? 
-\end_layout
-
-\begin_layout Standard
-Ovviamente tale utente verrà influenzato da ciò che gli altri hanno detto.
- Quest'ultimo leggerà le varie review, ma come è possibile intuire, quelle
- che avranno una maggiore considerazione sono le recensioni più recenti.
- 
+Apache Spark è un framework open source per il calcolo distribuito sviluppato
+ dall'AMPlab della Università della California e successivamente donato
+ alla Apache Software Foundation.
+ A differenza del paradigma MapReduce, basato sul disco a due livelli di
+ Hadoop, le primitive "in-memory" multilivello di Spark forniscono prestazioni
+ fino a 100 volte migliori per talune applicazioni.
+ Ciò permette ai programmi utente di caricare dati in un gruppo di memorie
+ e interrogarlo ripetutamente.
+ Spark richiede un gestore di cluster e un sistema di archiviazione distribuita.
+ Per il primo supporta nativamente un cluster Spark ma anche Hadoop YARN,
+ per il secondo Spark può interfacciarsi con Hadoop Distributed File System
+ (HDFS), Apache Cassandra, Amazon S3, ma anche soluzioni personalizzabili.
+ Spark supporta anche soluzioni pseudo-distribuite in modalità locale, usate
+ di solito per lo sviluppo o scopo di test, dove l'archiviazione distribuita
+ non è richiesta e si usa il file system locale; in tale scenario, Spark
+ è eseguito su una macchina singola.
+ L’architettura di Spark si compone di un master scheduler e di tanti worker
+ che eseguono il calcolo distribuito, quindi secondo quello che è lo standard
+ architetturare dei sistemi distribuiti.
+ Ovviamente gli sviluppatori di Spark fanno notare nel loro paper che Spark
+ è stato pensato per dare il meglio nelle elaborazioni batch, mentre non
+ funziona in maniera performante in sistemi distribuiti che richiedono frequenti
+ update granulari sui set di dati archiviati.
+ In quel caso, meglio evitare di usare Spark o Hadoop e invece usare un
+ normale sistema di database o un sistema di distributed shared memory,
+ che sono invece pensati per questo.
 \end_layout
 
 \end_body
