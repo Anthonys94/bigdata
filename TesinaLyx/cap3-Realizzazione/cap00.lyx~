@@ -276,6 +276,477 @@ Non è mai stato eletto Elite.
 \end_layout
 
 \begin_layout Standard
+Di seguito è riportato il listato relativo a tale script:
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{lstlisting}[language=Python] 
+\end_layout
+
+\begin_layout Plain Layout
+
+#!/usr/bin/python
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+import pymongo
+\end_layout
+
+\begin_layout Plain Layout
+
+from pymongo import MongoClient
+\end_layout
+
+\begin_layout Plain Layout
+
+import pprint
+\end_layout
+
+\begin_layout Plain Layout
+
+import json
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+#Connessione a MongoDB
+\end_layout
+
+\begin_layout Plain Layout
+
+client = MongoClient('localhost',27017)
+\end_layout
+
+\begin_layout Plain Layout
+
+db = client.YelpDB
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+#Caricamento utenti
+\end_layout
+
+\begin_layout Plain Layout
+
+users = db.user.find()
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+#Calcolo valore utente
+\end_layout
+
+\begin_layout Plain Layout
+
+jsonlist = []
+\end_layout
+
+\begin_layout Plain Layout
+
+for element in users:
+\end_layout
+
+\begin_layout Plain Layout
+
+	subel = {}
+\end_layout
+
+\begin_layout Plain Layout
+
+	subel['user_id']= element['user_id']   #id utente
+\end_layout
+
+\begin_layout Plain Layout
+
+	numAnniElite = len(element['elite'])
+\end_layout
+
+\begin_layout Plain Layout
+
+	numAmici = len(element['friends'])
+\end_layout
+
+\begin_layout Plain Layout
+
+	sCompl = element['compliment_hot'] + element['compliment_more'] + element['comp
+liment_profile'] + element['compliment_cute'] + element['compliment_list']
+ + element['compliment_note'] + element['compliment_plain'] + element['complimen
+t_cool'] + element['compliment_funny'] + element['compliment_writer'] +
+ element['compliment_photos']
+\end_layout
+
+\begin_layout Plain Layout
+
+ 	if '2017' in element['elite']:
+\end_layout
+
+\begin_layout Plain Layout
+
+		Elite17 = 1
+\end_layout
+
+\begin_layout Plain Layout
+
+	else:
+\end_layout
+
+\begin_layout Plain Layout
+
+		Elite17 = 0
+\end_layout
+
+\begin_layout Plain Layout
+
+	subel['valore'] = 0.27*Elite17+ 0.05*numAnniElite+0.13*element['fans']+0.06*element
+['review_count']+0.1*numAmici+0.1*sCompl+0.19*element['useful']+0.03*element['funny'
+]+0.05*element['cool']
+\end_layout
+
+\begin_layout Plain Layout
+
+	jsonlist.append(subel) 
+\end_layout
+
+\begin_layout Plain Layout
+
+with open('sintesiuser.json','w') as outfile:
+\end_layout
+
+\begin_layout Plain Layout
+
+    json.dump(jsonlist,outfile) 
+\end_layout
+
+\begin_layout Plain Layout
+
+collection = db.sintesiuser
+\end_layout
+
+\begin_layout Plain Layout
+
+clear = collection.remove()
+\end_layout
+
+\begin_layout Plain Layout
+
+result = collection.insert_many(jsonlist) 
+\end_layout
+
+\begin_layout Plain Layout
+
+client.close() 
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{lstlisting}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Inoltre di seguito è riportato il listato di tale programma implementato
+ in pyspark:
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{lstlisting}[language=Python] 
+\end_layout
+
+\begin_layout Plain Layout
+
+#!/usr/bin/python
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+import pymongo
+\end_layout
+
+\begin_layout Plain Layout
+
+from pymongo import MongoClient
+\end_layout
+
+\begin_layout Plain Layout
+
+import pprint
+\end_layout
+
+\begin_layout Plain Layout
+
+import json
+\end_layout
+
+\begin_layout Plain Layout
+
+from pyspark import SparkConf, SparkContext
+\end_layout
+
+\begin_layout Plain Layout
+
+import string
+\end_layout
+
+\begin_layout Plain Layout
+
+import csv
+\end_layout
+
+\begin_layout Plain Layout
+
+import re
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+conf = SparkConf()
+\end_layout
+
+\begin_layout Plain Layout
+
+conf.setMaster("local[*]")
+\end_layout
+
+\begin_layout Plain Layout
+
+conf.setAppName("val utente")
+\end_layout
+
+\begin_layout Plain Layout
+
+conf.set("spark.executor.memory", "16g")
+\end_layout
+
+\begin_layout Plain Layout
+
+sc = SparkContext(conf = conf)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+#Connessione a MongoDB
+\end_layout
+
+\begin_layout Plain Layout
+
+client = MongoClient('localhost',27017)
+\end_layout
+
+\begin_layout Plain Layout
+
+db = client.YelpDB
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+#Caricamento utenti
+\end_layout
+
+\begin_layout Plain Layout
+
+users= db.user.find().limit(50000)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+#Calcolo valore utente
+\end_layout
+
+\begin_layout Plain Layout
+
+jsonlist = []
+\end_layout
+
+\begin_layout Plain Layout
+
+def worker(element):
+\end_layout
+
+\begin_layout Plain Layout
+
+	numAnniElite = len(element['elite'])
+\end_layout
+
+\begin_layout Plain Layout
+
+	numAmici = len(element['friends'])
+\end_layout
+
+\begin_layout Plain Layout
+
+	sCompl = element['compliment_hot'] + element['compliment_more'] + element['comp
+liment_profile'] + element['compliment_cute'] + element['compliment_list']
+ + element['compliment_note'] + element['compliment_plain'] + element['complimen
+t_cool'] + element['compliment_funny'] + element['compliment_writer'] +
+ element['compliment_photos']
+\end_layout
+
+\begin_layout Plain Layout
+
+ 	if '2017' in element['elite']:
+\end_layout
+
+\begin_layout Plain Layout
+
+		Elite17 = 1
+\end_layout
+
+\begin_layout Plain Layout
+
+	else:
+\end_layout
+
+\begin_layout Plain Layout
+
+		Elite17 = 0
+\end_layout
+
+\begin_layout Plain Layout
+
+	valore = 0.27*Elite17+ 0.05*numAnniElite+0.13*element['fans']+0.06*element['review_
+count']+0.1*numAmici+0.1*sCompl+0.19*element['useful']+0.03*element['funny']+0.05*ele
+ment['cool']
+\end_layout
+
+\begin_layout Plain Layout
+
+        subel=[element['user_id'],numAnniElite, numAmici, sCompl,element['fans']
+,element['review_count'],element['useful'], element['funny'], element['cool'],va
+lore]
+\end_layout
+
+\begin_layout Plain Layout
+
+        return subel
+\end_layout
+
+\begin_layout Plain Layout
+
+#	jsonlist.append(subel)
+\end_layout
+
+\begin_layout Plain Layout
+
+user = sc.parallelize(users)
+\end_layout
+
+\begin_layout Plain Layout
+
+results = user.map(worker)
+\end_layout
+
+\begin_layout Plain Layout
+
+print ' ********************************* RESULT *************************'
+\end_layout
+
+\begin_layout Plain Layout
+
+csvf= [["user_id","numAnniElite","numAmici","sCompl","fans","review_count","usef
+ul","funny","cool","valore"]]
+\end_layout
+
+\begin_layout Plain Layout
+
+csvf= csvf+ results.take(results.count())
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+fileu=open("AnalisiUt.csv",'w') with fileu:
+\end_layout
+
+\begin_layout Plain Layout
+
+    writer = csv.writer(fileu, delimiter=",", quotechar="|", quoting=csv.QUOTE_MIN
+IMAL)
+\end_layout
+
+\begin_layout Plain Layout
+
+    writer.writerows(csvf)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+client.close() 
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{lstlisting}
+\end_layout
+
+\end_inset
+
 
 \end_layout
 
@@ -440,6 +911,10 @@ L'output di tale script viene memorizzato in una collection del database,
  Tali informazioni sono necessarie in quanto verranno utilizzate solo dopo
  aver trovato i parametri migliori della funzione di opnione pubblica.
  Di seguito è riportato il listato relativo a tale script:
+\end_layout
+
+\begin_layout Standard
+
 \end_layout
 
 \begin_layout Section

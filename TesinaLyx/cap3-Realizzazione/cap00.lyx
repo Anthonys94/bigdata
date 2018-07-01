@@ -275,6 +275,481 @@ Non ha amici , ne fans.
 Non è mai stato eletto Elite.
 \end_layout
 
+\begin_layout Standard
+Di seguito è riportato il listato relativo a tale script:
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{lstlisting}[language=Python] 
+\end_layout
+
+\begin_layout Plain Layout
+
+#!/usr/bin/python
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+import pymongo
+\end_layout
+
+\begin_layout Plain Layout
+
+from pymongo import MongoClient
+\end_layout
+
+\begin_layout Plain Layout
+
+import pprint
+\end_layout
+
+\begin_layout Plain Layout
+
+import json
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+#Connessione a MongoDB
+\end_layout
+
+\begin_layout Plain Layout
+
+client = MongoClient('localhost',27017)
+\end_layout
+
+\begin_layout Plain Layout
+
+db = client.YelpDB
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+#Caricamento utenti
+\end_layout
+
+\begin_layout Plain Layout
+
+users = db.user.find()
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+#Calcolo valore utente
+\end_layout
+
+\begin_layout Plain Layout
+
+jsonlist = []
+\end_layout
+
+\begin_layout Plain Layout
+
+for element in users:
+\end_layout
+
+\begin_layout Plain Layout
+
+	subel = {}
+\end_layout
+
+\begin_layout Plain Layout
+
+	subel['user_id']= element['user_id']   #id utente
+\end_layout
+
+\begin_layout Plain Layout
+
+	numAnniElite = len(element['elite'])
+\end_layout
+
+\begin_layout Plain Layout
+
+	numAmici = len(element['friends'])
+\end_layout
+
+\begin_layout Plain Layout
+
+	sCompl = element['compliment_hot'] + element['compliment_more'] + element['comp
+liment_profile'] + element['compliment_cute'] + element['compliment_list']
+ + element['compliment_note'] + element['compliment_plain'] + element['complimen
+t_cool'] + element['compliment_funny'] + element['compliment_writer'] +
+ element['compliment_photos']
+\end_layout
+
+\begin_layout Plain Layout
+
+ 	if '2017' in element['elite']:
+\end_layout
+
+\begin_layout Plain Layout
+
+		Elite17 = 1
+\end_layout
+
+\begin_layout Plain Layout
+
+	else:
+\end_layout
+
+\begin_layout Plain Layout
+
+		Elite17 = 0
+\end_layout
+
+\begin_layout Plain Layout
+
+	subel['valore'] = 0.27*Elite17+ 0.05*numAnniElite+0.13*element['fans']+0.06*element
+['review_count']+0.1*numAmici+0.1*sCompl+0.19*element['useful']+0.03*element['funny'
+]+0.05*element['cool']
+\end_layout
+
+\begin_layout Plain Layout
+
+	jsonlist.append(subel) 
+\end_layout
+
+\begin_layout Plain Layout
+
+with open('sintesiuser.json','w') as outfile:
+\end_layout
+
+\begin_layout Plain Layout
+
+    json.dump(jsonlist,outfile) 
+\end_layout
+
+\begin_layout Plain Layout
+
+collection = db.sintesiuser
+\end_layout
+
+\begin_layout Plain Layout
+
+clear = collection.remove()
+\end_layout
+
+\begin_layout Plain Layout
+
+result = collection.insert_many(jsonlist) 
+\end_layout
+
+\begin_layout Plain Layout
+
+client.close() 
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{lstlisting}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Inoltre di seguito è riportato il listato di tale programma implementato
+ in pyspark:
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{lstlisting}[language=Python] 
+\end_layout
+
+\begin_layout Plain Layout
+
+#!/usr/bin/python
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+import pymongo
+\end_layout
+
+\begin_layout Plain Layout
+
+from pymongo import MongoClient
+\end_layout
+
+\begin_layout Plain Layout
+
+import pprint
+\end_layout
+
+\begin_layout Plain Layout
+
+import json
+\end_layout
+
+\begin_layout Plain Layout
+
+from pyspark import SparkConf, SparkContext
+\end_layout
+
+\begin_layout Plain Layout
+
+import string
+\end_layout
+
+\begin_layout Plain Layout
+
+import csv
+\end_layout
+
+\begin_layout Plain Layout
+
+import re
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+conf = SparkConf()
+\end_layout
+
+\begin_layout Plain Layout
+
+conf.setMaster("local[*]")
+\end_layout
+
+\begin_layout Plain Layout
+
+conf.setAppName("val utente")
+\end_layout
+
+\begin_layout Plain Layout
+
+conf.set("spark.executor.memory", "16g")
+\end_layout
+
+\begin_layout Plain Layout
+
+sc = SparkContext(conf = conf)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+#Connessione a MongoDB
+\end_layout
+
+\begin_layout Plain Layout
+
+client = MongoClient('localhost',27017)
+\end_layout
+
+\begin_layout Plain Layout
+
+db = client.YelpDB
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+#Caricamento utenti
+\end_layout
+
+\begin_layout Plain Layout
+
+users= db.user.find().limit(50000)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+#Calcolo valore utente
+\end_layout
+
+\begin_layout Plain Layout
+
+jsonlist = []
+\end_layout
+
+\begin_layout Plain Layout
+
+def worker(element):
+\end_layout
+
+\begin_layout Plain Layout
+
+	numAnniElite = len(element['elite'])
+\end_layout
+
+\begin_layout Plain Layout
+
+	numAmici = len(element['friends'])
+\end_layout
+
+\begin_layout Plain Layout
+
+	sCompl = element['compliment_hot'] + element['compliment_more'] + element['comp
+liment_profile'] + element['compliment_cute'] + element['compliment_list']
+ + element['compliment_note'] + element['compliment_plain'] + element['complimen
+t_cool'] + element['compliment_funny'] + element['compliment_writer'] +
+ element['compliment_photos']
+\end_layout
+
+\begin_layout Plain Layout
+
+ 	if '2017' in element['elite']:
+\end_layout
+
+\begin_layout Plain Layout
+
+		Elite17 = 1
+\end_layout
+
+\begin_layout Plain Layout
+
+	else:
+\end_layout
+
+\begin_layout Plain Layout
+
+		Elite17 = 0
+\end_layout
+
+\begin_layout Plain Layout
+
+	valore = 0.27*Elite17+ 0.05*numAnniElite+0.13*element['fans']+0.06*element['review_
+count']+0.1*numAmici+0.1*sCompl+0.19*element['useful']+0.03*element['funny']+0.05*ele
+ment['cool']
+\end_layout
+
+\begin_layout Plain Layout
+
+        subel=[element['user_id'],numAnniElite, numAmici, sCompl,element['fans']
+,element['review_count'],element['useful'], element['funny'], element['cool'],va
+lore]
+\end_layout
+
+\begin_layout Plain Layout
+
+        return subel
+\end_layout
+
+\begin_layout Plain Layout
+
+#	jsonlist.append(subel)
+\end_layout
+
+\begin_layout Plain Layout
+
+user = sc.parallelize(users)
+\end_layout
+
+\begin_layout Plain Layout
+
+results = user.map(worker)
+\end_layout
+
+\begin_layout Plain Layout
+
+print ' ********************************* RESULT *************************'
+\end_layout
+
+\begin_layout Plain Layout
+
+csvf= [["user_id","numAnniElite","numAmici","sCompl","fans","review_count","usef
+ul","funny","cool","valore"]]
+\end_layout
+
+\begin_layout Plain Layout
+
+csvf= csvf+ results.take(results.count())
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+fileu=open("AnalisiUt.csv",'w') with fileu:
+\end_layout
+
+\begin_layout Plain Layout
+
+    writer = csv.writer(fileu, delimiter=",", quotechar="|", quoting=csv.QUOTE_MIN
+IMAL)
+\end_layout
+
+\begin_layout Plain Layout
+
+    writer.writerows(csvf)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+client.close() 
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{lstlisting}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
 \begin_layout Section
 valoreReview.py
 \end_layout
@@ -438,6 +913,558 @@ L'output di tale script viene memorizzato in una collection del database,
  Di seguito è riportato il listato relativo a tale script:
 \end_layout
 
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{lstlisting}[language=Python]
+\end_layout
+
+\begin_layout Plain Layout
+
+#!/usr/bin/python
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+#Tale script serve per determinare il valore di opinione per le varie review.
+\end_layout
+
+\begin_layout Plain Layout
+
+#In particolare, sono prese in considerazione solo le review relative ad
+ un business che ha un numero di review maggiore di 500.
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+from nltk.sentiment.vader import SentimentIntensityAnalyzer
+\end_layout
+
+\begin_layout Plain Layout
+
+from nltk import tokenize
+\end_layout
+
+\begin_layout Plain Layout
+
+import nltk
+\end_layout
+
+\begin_layout Plain Layout
+
+nltk.download('vader_lexicon')
+\end_layout
+
+\begin_layout Plain Layout
+
+nltk.download('punkt')
+\end_layout
+
+\begin_layout Plain Layout
+
+import pymongo
+\end_layout
+
+\begin_layout Plain Layout
+
+from pymongo import MongoClient
+\end_layout
+
+\begin_layout Plain Layout
+
+import pprint
+\end_layout
+
+\begin_layout Plain Layout
+
+import json
+\end_layout
+
+\begin_layout Plain Layout
+
+################################
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+#Connessione a MongoDB
+\end_layout
+
+\begin_layout Plain Layout
+
+client=MongoClient('localhost',27017)
+\end_layout
+
+\begin_layout Plain Layout
+
+db=client.YelpDB
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+#Seleziona le review relative ai business con review_count maggiore di 500
+\end_layout
+
+\begin_layout Plain Layout
+
+print "--- Lettura negozi"
+\end_layout
+
+\begin_layout Plain Layout
+
+curnegozi = db.business.find({"review_count": {"$gte": 500 }})
+\end_layout
+
+\begin_layout Plain Layout
+
+#tutti i negozi con review_cout magg o uguale a 500
+\end_layout
+
+\begin_layout Plain Layout
+
+negozi=[]
+\end_layout
+
+\begin_layout Plain Layout
+
+for element in curnegozi:
+\end_layout
+
+\begin_layout Plain Layout
+
+    negozi.append(element['business_id'])
+\end_layout
+
+\begin_layout Plain Layout
+
+#usa la lista per ricavare le review relative ai negozi
+\end_layout
+
+\begin_layout Plain Layout
+
+print "--- Lettura review"
+\end_layout
+
+\begin_layout Plain Layout
+
+reviews= db.review.find({"business_id":{"$in":negozi}})
+\end_layout
+
+\begin_layout Plain Layout
+
+#lista degli utenti che hanno scritto le review relative ai business
+\end_layout
+
+\begin_layout Plain Layout
+
+print "--- Lista utenti"
+\end_layout
+
+\begin_layout Plain Layout
+
+listaid=db.review.distinct("user_id", {"business_id":{"$in":negozi}})
+\end_layout
+
+\begin_layout Plain Layout
+
+#prendo gli utenti con l'id ritornato sopra.
+\end_layout
+
+\begin_layout Plain Layout
+
+utenti= db.sintesiuser.find({"user_id": {"$in": listaid}})
+\end_layout
+
+\begin_layout Plain Layout
+
+#dobbiamo scorrere la lista delle review per effettuare il calcolo dei valori
+\end_layout
+
+\begin_layout Plain Layout
+
+#massimo degli utenti in sintesiuser
+\end_layout
+
+\begin_layout Plain Layout
+
+utm=db.sintesiuser.find().sort("valore",-1).limit(1)
+\end_layout
+
+\begin_layout Plain Layout
+
+massimo=utm.next()['valore']
+\end_layout
+
+\begin_layout Plain Layout
+
+#minimo
+\end_layout
+
+\begin_layout Plain Layout
+
+utm=db.sintesiuser.find().sort("valore",1).limit(1)
+\end_layout
+
+\begin_layout Plain Layout
+
+minimo=utm.next()['valore']
+\end_layout
+
+\begin_layout Plain Layout
+
+utentidict=[]
+\end_layout
+
+\begin_layout Plain Layout
+
+print "--- Creazione dizionario degli utenti"
+\end_layout
+
+\begin_layout Plain Layout
+
+for element in utenti:
+\end_layout
+
+\begin_layout Plain Layout
+
+    utentidict.append([element['user_id'],element['valore']])
+\end_layout
+
+\begin_layout Plain Layout
+
+utentidict=dict(utentidict)
+\end_layout
+
+\begin_layout Plain Layout
+
+print "--- Analisi review e calcolo valore"
+\end_layout
+
+\begin_layout Plain Layout
+
+#Quindi abbiamo selezionato le review relative a tutti i negozi con
+\end_layout
+
+\begin_layout Plain Layout
+
+ #review count > 500 e inoltre abbiamo preso tutti gli utenti
+\end_layout
+
+\begin_layout Plain Layout
+
+ #che hanno scritto quelle review
+\end_layout
+
+\begin_layout Plain Layout
+
+jsonlist= []
+\end_layout
+
+\begin_layout Plain Layout
+
+sid = SentimentIntensityAnalyzer()
+\end_layout
+
+\begin_layout Plain Layout
+
+indice=0
+\end_layout
+
+\begin_layout Plain Layout
+
+for element in reviews:
+\end_layout
+
+\begin_layout Plain Layout
+
+    print indice
+\end_layout
+
+\begin_layout Plain Layout
+
+     #per tener conto delle elaborazioni
+\end_layout
+
+\begin_layout Plain Layout
+
+    indice=indice+1
+\end_layout
+
+\begin_layout Plain Layout
+
+    subel = {}
+\end_layout
+
+\begin_layout Plain Layout
+
+    subel['review_id']= element['review_id']         #reviewid
+\end_layout
+
+\begin_layout Plain Layout
+
+    subel['business_id']= element['business_id']     #id negozio
+\end_layout
+
+\begin_layout Plain Layout
+
+    subel['user_id']= element['user_id']             #id utente
+\end_layout
+
+\begin_layout Plain Layout
+
+    subel['date'] = element['date']                  #data
+\end_layout
+
+\begin_layout Plain Layout
+
+    subel['stars']= element['stars']                 #stelle per elaborazione
+\end_layout
+
+\begin_layout Plain Layout
+
+    #adesso dobbiamo calcolare il valore, dato dalla seguente espressione
+\end_layout
+
+\begin_layout Plain Layout
+
+      #(lib+sterlinenormalizzato)*(1 + useful0.7+funny0.1+cool0.2 )*(1+ valoreUtent
+e)
+\end_layout
+
+\begin_layout Plain Layout
+
+    lines_list = tokenize.sent_tokenize(element['text'])
+\end_layout
+
+\begin_layout Plain Layout
+
+    #per ogni frase viene calcolata lo score di polarita
+\end_layout
+
+\begin_layout Plain Layout
+
+    #I vari score si sommano tra loro
+\end_layout
+
+\begin_layout Plain Layout
+
+    #Infine viene effettuata una media
+\end_layout
+
+\begin_layout Plain Layout
+
+        app=0
+\end_layout
+
+\begin_layout Plain Layout
+
+    for sentence in lines_list:
+\end_layout
+
+\begin_layout Plain Layout
+
+        ss = sid.polarity_scores(sentence)
+\end_layout
+
+\begin_layout Plain Layout
+
+        app=ss['compound']+app
+\end_layout
+
+\begin_layout Plain Layout
+
+    lib = app/len(lines_list)  #media
+\end_layout
+
+\begin_layout Plain Layout
+
+    #normalizzazion stelle:
+\end_layout
+
+\begin_layout Plain Layout
+
+    # 1 stella --> -1
+\end_layout
+
+\begin_layout Plain Layout
+
+    # 2 stelle --> -0.5
+\end_layout
+
+\begin_layout Plain Layout
+
+    # 3 stelle --> 0        ==> punteggio= 0.5*Stella-1.5
+\end_layout
+
+\begin_layout Plain Layout
+
+    # 4 stelle --> 0.5
+\end_layout
+
+\begin_layout Plain Layout
+
+    # 5 stelle --> 1
+\end_layout
+
+\begin_layout Plain Layout
+
+           #normalizzazione tra 0 e 10
+\end_layout
+
+\begin_layout Plain Layout
+
+    valoreUtente = utentidict[subel['user_id']]
+\end_layout
+
+\begin_layout Plain Layout
+
+    valoreUtentenorm=10/(massimo-minimo)*(valoreUtente-massimo)+10
+\end_layout
+
+\begin_layout Plain Layout
+
+    subel['funny']=element['funny']
+\end_layout
+
+\begin_layout Plain Layout
+
+    subel['cool']=element['cool']
+\end_layout
+
+\begin_layout Plain Layout
+
+    subel['useful']=element['useful']
+\end_layout
+
+\begin_layout Plain Layout
+
+    subel['vlutente']=valoreUtentenorm
+\end_layout
+
+\begin_layout Plain Layout
+
+    subel['valorelib']= lib                     #valorelib
+\end_layout
+
+\begin_layout Plain Layout
+
+    subel['valoretext']=(lib+0.5*element['stars']-1.5)/2 #valore solo testo
+\end_layout
+
+\begin_layout Plain Layout
+
+    #valore opinione
+\end_layout
+
+\begin_layout Plain Layout
+
+    #subel['valoreOp']= (lib+0.5*element['stars']-1.5)*(1 + 0.7*element['useful']+0.
+1*element['funny']+0.2*element['cool'])*(1 + valoreUtente)
+\end_layout
+
+\begin_layout Plain Layout
+
+    jsonlist.append(subel)
+\end_layout
+
+\begin_layout Plain Layout
+
+#mettere l'output su un file json che si chiama sintesireview.json
+\end_layout
+
+\begin_layout Plain Layout
+
+#inserire il file nel database.
+ 
+\end_layout
+
+\begin_layout Plain Layout
+
+#jsonobj=json.dumps(jsonlist)
+\end_layout
+
+\begin_layout Plain Layout
+
+with open('sintesireviewidea.json','w') as outfile:
+\end_layout
+
+\begin_layout Plain Layout
+
+    json.dump(jsonlist,outfile)
+\end_layout
+
+\begin_layout Plain Layout
+
+#vedere come salvare sul db!
+\end_layout
+
+\begin_layout Plain Layout
+
+collection = db.sintesireviewidea
+\end_layout
+
+\begin_layout Plain Layout
+
+clear = collection.remove()
+\end_layout
+
+\begin_layout Plain Layout
+
+           #pulisco la collection da eventuali scritture precedenti
+\end_layout
+
+\begin_layout Plain Layout
+
+result = collection.insert_many(jsonlist)
+\end_layout
+
+\begin_layout Plain Layout
+
+   #inserisco gli elementi calcolati '
+\end_layout
+
+\begin_layout Plain Layout
+
+client.close()
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{lstlisting}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
 \begin_layout Section
 tuning.py
 \end_layout
@@ -564,6 +1591,231 @@ Il tuning dei parametri è stato effettuato considerando che valori sempre
  Di seguito è riportato il listato relativo allo script:
 \end_layout
 
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{lstlisting}[language=Python]
+\end_layout
+
+\begin_layout Plain Layout
+
+#!/usr/bin/python
+\end_layout
+
+\begin_layout Plain Layout
+
+import pymongo
+\end_layout
+
+\begin_layout Plain Layout
+
+from pymongo import MongoClient
+\end_layout
+
+\begin_layout Plain Layout
+
+import numpy as np
+\end_layout
+
+\begin_layout Plain Layout
+
+from sklearn.metrics
+\end_layout
+
+\begin_layout Plain Layout
+
+import mean_squared_error from math
+\end_layout
+
+\begin_layout Plain Layout
+
+import sqrt
+\end_layout
+
+\begin_layout Plain Layout
+
+import itertools
+\end_layout
+
+\begin_layout Plain Layout
+
+import operator
+\end_layout
+
+\begin_layout Plain Layout
+
+from collections import Counter
+\end_layout
+
+\begin_layout Plain Layout
+
+#Connessione a MongoDB
+\end_layout
+
+\begin_layout Plain Layout
+
+client = MongoClient('localhost',27017)
+\end_layout
+
+\begin_layout Plain Layout
+
+db = client.YelpDB
+\end_layout
+
+\begin_layout Plain Layout
+
+cursor=db.sintesireviewidea.find()
+\end_layout
+
+\begin_layout Plain Layout
+
+print cursor.count()
+\end_layout
+
+\begin_layout Plain Layout
+
+val=[(0,0.1,0.9),(0,0.2,0.8),(0,0.3,0.7),(0,0.4,0.6),(0,0.5,0.5),(0,0.6,0.4),(0,0.7,0.3),(0,0.8
+,0.2),(0,0.9,0.1),(0.1,0,0.9),(0.1,0.1,0.8),(0.1,0.2,0.7),(0.1,0.3,0.6),(0.1,0.4,0.5),(0.1,0.5,0.4),
+(0.1,0.6,0.3),(0.1,0.7,0.2),(0.1,0.8,0.1),(0.1,0.9,0),(0.2,0,0.8),(0.2,0.1,0.7),(0.2,0.2,0.6),(0.2,0.
+3,0.5),(0.2,0.4,0.4),(0.2,0.5,0.3),(0.2,0.6,0.2),(0.2,0.7,0.1),(0.2,0.8,0),(0.3,0,0.7),(0.3,0.1,0.6)
+,(0.3,0.2,0.5),(0.3,0.3,0.4),(0.3,0.4,0.3),(0.3,0.5,0.2),(0.3,0.6,0.1),(0.3,0.7,0),(0.4,0,0.6),(0.4,
+0.1,0.5),(0.4,0.2,0.4),(0.4,0.3,0.3),(0.4,0.4,0.2),(0.4,0.5,0.1),(0.4,0.6,0),(0.5,0,0.5),(0.5,0.1,0.4
+),(0.5,0.2,0.3),(0.5,0.3,0.2),(0.5,0.4,0.1),(0.5,0.5,0),(0.6,0,0.4),(0.6,0.1,0.3),(0.6,0.2,0.2),(0.6
+,0.3,0.1),(0.6,0.4,0),(0.7,0,0.3),(0.7,0.1,0.2),(0.7,0.3,0),(0.8,0,0.2),(0.8,0.1,0.1),(0.8,0.2,0),
+(0.9,0,0.1),(0.9,0.1,0)]
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+valori=[]
+\end_layout
+
+\begin_layout Plain Layout
+
+ tuplemax=[]
+\end_layout
+
+\begin_layout Plain Layout
+
+calcolomax=[]
+\end_layout
+
+\begin_layout Plain Layout
+
+i=1
+\end_layout
+
+\begin_layout Plain Layout
+
+for e in cursor:
+\end_layout
+
+\begin_layout Plain Layout
+
+    for t in val:
+\end_layout
+
+\begin_layout Plain Layout
+
+    	valori.append(abs(e['valoretext']*(1+t[0]*e['useful']+t[1]*e['cool']+t[2]*e[
+'funny'])*(1+e['vlutente']))) 
+\end_layout
+
+\begin_layout Plain Layout
+
+    print i
+\end_layout
+
+\begin_layout Plain Layout
+
+    i=i+1
+\end_layout
+
+\begin_layout Plain Layout
+
+    tupla=val[valori.index(max(valori))]
+\end_layout
+
+\begin_layout Plain Layout
+
+    tuplemax.append(tupla)
+\end_layout
+
+\begin_layout Plain Layout
+
+    f=open("tuning.txt", "a+")
+\end_layout
+
+\begin_layout Plain Layout
+
+    f.write("Tupla: %5.1f %5.1f %5.1f 
+\backslash
+n" %(tupla[0],tupla[1],tupla[2]))
+\end_layout
+
+\begin_layout Plain Layout
+
+    f.close()
+\end_layout
+
+\begin_layout Plain Layout
+
+    del valori[:] 
+\end_layout
+
+\begin_layout Plain Layout
+
+cnt = Counter(tuplemax)
+\end_layout
+
+\begin_layout Plain Layout
+
+      print cnt.most_common(3)
+\end_layout
+
+\begin_layout Plain Layout
+
+#f=open("tuning.txt", "a+")
+\end_layout
+
+\begin_layout Plain Layout
+
+#f.write("Tupla: %5.1f %5.1f %5.1f  
+\backslash
+n" %(tup[0],tup[1],tup[2]))
+\end_layout
+
+\begin_layout Plain Layout
+
+#f.close()
+\end_layout
+
+\begin_layout Plain Layout
+
+client.close() 
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{lstlisting}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
 \begin_layout Section
 valoreOpinione.py
 \end_layout
@@ -587,7 +1839,6 @@ za maggiore alle review più attuali, e alle review precedenti si associa
  un'importanza man mano sempre più piccola.
  Quindi il pensiero dell'utente sarà influenzato dalle review appena lette
  a cui viene aggiunto un contributo dovuto alle review lette precedentemente.
- Di seguito è riportato il listato relativo a tale script: 
 \end_layout
 
 \end_body

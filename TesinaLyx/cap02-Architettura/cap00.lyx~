@@ -352,6 +352,48 @@ MongoDB supporta collection a dimensioni fisse chiamate capped collection.
 \end_layout
 
 \end_deeper
+\begin_layout Standard
+Di seguito viene mostrata l'architettura relativa a mongoDB:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+placement H
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename img/MongoDB-Architecture.jpg
+	scale 20
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+MongoDB Architecture
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
 \begin_layout Section
 Spark
 \end_layout
@@ -383,6 +425,41 @@ Apache Spark è un framework open source per il calcolo distribuito sviluppato
  In quel caso, meglio evitare di usare Spark o Hadoop e invece usare un
  normale sistema di database o un sistema di distributed shared memory,
  che sono invece pensati per questo.
+ Di seguito è riportata l'architettura relativa al framework Apache Spark:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+placement H
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename img/SparkArchitecture.JPG
+	scale 20
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Spark Architecture
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \end_body
